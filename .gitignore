@@ -1,0 +1,49 @@
+# Eclipse/STS metadata
+.metadata/
+.settings/
+.classpath
+.project
+.factorypath
+
+# Build output
+target/
+bin/
+build/
+out/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+*.log
+
+# Logs
+logs/
+*.log
+log4j*.xml
+
+# Package Files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Spring Boot
+.spring-beans-cache/
+spring-configuration-metadata.json
+
+# H2 Database
+*.db
+
+# OS specific files
+.DS_Store
+Thumbs.db
