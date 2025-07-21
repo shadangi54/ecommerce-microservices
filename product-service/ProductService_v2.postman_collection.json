@@ -1,0 +1,194 @@
+{
+  "info": {
+    "_postman_id": "b7f8e9d5-1a2b-4c3d-9e8f-7a6b5c4d3e2f",
+    "name": "Product Service API Tests",
+    "description": "Collection for testing the Product Service REST APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": ["{{baseUrl}}"],
+          "path": ["products"]
+        },
+        "description": "Fetches all products from the service"
+      }
+    },
+    {
+      "name": "Get Product by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["products", "1"]
+        },
+        "description": "Fetches a specific product by ID"
+      }
+    },
+    {
+      "name": "Create New Product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Gaming Laptop\",\n    \"description\": \"High-performance gaming laptop with RTX 4080\",\n    \"price\": 1999.99,\n    \"category\": \"Electronics\",\n    \"imageUrl\": \"https://example.com/gaming-laptop.jpg\",\n    \"stockQuantity\": 25,\n    \"isActive\": true,\n    \"createdBy\": \"admin\",\n    \"modifiedBy\": \"admin\",\n    \"createdAt\": \"2025-07-21\",\n    \"modifiedAt\": \"2025-07-21\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": ["{{baseUrl}}"],
+          "path": ["products"]
+        },
+        "description": "Creates a new product in the system"
+      }
+    },
+    {
+      "name": "Update Existing Product",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Updated Gaming Laptop\",\n    \"description\": \"Updated high-performance gaming laptop with RTX 4080 and 32GB RAM\",\n    \"price\": 2199.99,\n    \"category\": \"Electronics\",\n    \"imageUrl\": \"https://example.com/updated-gaming-laptop.jpg\",\n    \"stockQuantity\": 20,\n    \"isActive\": true,\n    \"createdBy\": \"admin\",\n    \"modifiedBy\": \"admin-update\",\n    \"createdAt\": \"2025-07-21\",\n    \"modifiedAt\": \"2025-07-21\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["products", "1"]
+        },
+        "description": "Updates an existing product by ID"
+      }
+    },
+    {
+      "name": "Delete Product",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["products", "1"]
+        },
+        "description": "Deletes a product by ID"
+      }
+    },
+    {
+      "name": "Search Products (All Parameters)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/search?name=Gaming&category=Electronics&minPrice=1000&maxPrice=3000&isActive=true&minStock=5&maxStock=50",
+          "host": ["{{baseUrl}}"],
+          "path": ["products", "search"],
+          "query": [
+            {
+              "key": "name",
+              "value": "Gaming",
+              "description": "Search by product name"
+            },
+            {
+              "key": "category",
+              "value": "Electronics",
+              "description": "Filter by category"
+            },
+            {
+              "key": "minPrice",
+              "value": "1000",
+              "description": "Minimum price filter"
+            },
+            {
+              "key": "maxPrice",
+              "value": "3000",
+              "description": "Maximum price filter"
+            },
+            {
+              "key": "isActive",
+              "value": "true",
+              "description": "Filter by active status"
+            },
+            {
+              "key": "minStock",
+              "value": "5",
+              "description": "Minimum stock level"
+            },
+            {
+              "key": "maxStock",
+              "value": "50",
+              "description": "Maximum stock level"
+            }
+          ]
+        },
+        "description": "Search products with all available filters"
+      }
+    },
+    {
+      "name": "Search Products (Partial Parameters)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/search?category=Electronics&minPrice=1000",
+          "host": ["{{baseUrl}}"],
+          "path": ["products", "search"],
+          "query": [
+            {
+              "key": "category",
+              "value": "Electronics"
+            },
+            {
+              "key": "minPrice",
+              "value": "1000"
+            }
+          ]
+        },
+        "description": "Search products with partial parameters"
+      }
+    },
+    {
+      "name": "Get Low Stock Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/low-stock?threshold=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["products", "low-stock"],
+          "query": [
+            {
+              "key": "threshold",
+              "value": "10",
+              "description": "Stock threshold value"
+            }
+          ]
+        },
+        "description": "Get products with stock below threshold"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string",
+      "description": "Base URL for the Product Service API"
+    }
+  ]
+}

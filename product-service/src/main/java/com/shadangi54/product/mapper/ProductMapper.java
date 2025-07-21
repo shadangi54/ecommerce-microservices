@@ -1,5 +1,7 @@
 package com.shadangi54.product.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
 import com.shadangi54.product.DTO.ProductDTO;
@@ -12,7 +14,7 @@ public interface ProductMapper {
 
 	Product toEntity(ProductDTO productDTO);
 
-	Iterable<ProductDTO> toDTOs(Iterable<Product> products);
+	List<ProductDTO> toDTOs(List<Product> products);
 
-	Iterable<Product> toEntities(Iterable<ProductDTO> productDTOs);
+	List<Product> toEntities(List<ProductDTO> productDTOs);
 }

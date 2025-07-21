@@ -1,9 +1,12 @@
 package com.shadangi54.product.DTO;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class ProductDTO {
+public class ProductDTO implements Serializable{
+	private static final long serialVersionUID = 1L;
 	
 	private Long id;
 	private String name;
