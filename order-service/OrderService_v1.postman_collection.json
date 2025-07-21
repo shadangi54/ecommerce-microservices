@@ -1,0 +1,204 @@
+{
+  "info": {
+    "_postman_id": "12345678-1234-1234-1234-123456789012",
+    "name": "Order Service API",
+    "description": "Collection for testing Order Service endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12345678"
+  },
+  "item": [
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customerName\": \"John Doe\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"LAPTOP-001\",\n      \"quantity\": 1,\n      \"price\": 999.99\n    },\n    {\n      \"skuCode\": \"MOUSE-001\",\n      \"quantity\": 2,\n      \"price\": 25.50\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/orders",
+          "host": ["{{baseUrl}}"],
+          "path": ["orders"]
+        },
+        "description": "Create a new order with products"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Orders by Customer Name",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/orders/John Doe",
+          "host": ["{{baseUrl}}"],
+          "path": ["orders", "John Doe"]
+        },
+        "description": "Fetch all orders for a specific customer"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Order by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/orders/{{orderId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["orders", "{{orderId}}"]
+        },
+        "description": "Fetch a specific order by its ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Order Status",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/orders/{{orderId}}?status=COMPLETED",
+          "host": ["{{baseUrl}}"],
+          "path": ["orders", "{{orderId}}"],
+          "query": [
+            {
+              "key": "status",
+              "value": "COMPLETED"
+            }
+          ]
+        },
+        "description": "Update the status of an existing order"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Order - Electronics",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customerName\": \"Jane Smith\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"PHONE-001\",\n      \"quantity\": 1,\n      \"price\": 699.99\n    },\n    {\n      \"skuCode\": \"CASE-001\",\n      \"quantity\": 1,\n      \"price\": 29.99\n    },\n    {\n      \"skuCode\": \"CHARGER-001\",\n      \"quantity\": 1,\n      \"price\": 39.99\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/orders",
+          "host": ["{{baseUrl}}"],
+          "path": ["orders"]
+        },
+        "description": "Create an electronics order with multiple accessories"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Order - Books",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customerName\": \"Alice Johnson\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"BOOK-JAVA-001\",\n      \"quantity\": 2,\n      \"price\": 45.99\n    },\n    {\n      \"skuCode\": \"BOOK-SPRING-001\",\n      \"quantity\": 1,\n      \"price\": 59.99\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/orders",
+          "host": ["{{baseUrl}}"],
+          "path": ["orders"]
+        },
+        "description": "Create a book order"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Order Status - CANCELLED",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/orders/{{orderId}}?status=CANCELLED",
+          "host": ["{{baseUrl}}"],
+          "path": ["orders", "{{orderId}}"],
+          "query": [
+            {
+              "key": "status",
+              "value": "CANCELLED"
+            }
+          ]
+        },
+        "description": "Cancel an order by updating its status"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Orders - Non-existent Customer",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/orders/NonExistentUser",
+          "host": ["{{baseUrl}}"],
+          "path": ["orders", "NonExistentUser"]
+        },
+        "description": "Test case for customer with no orders"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Order - Invalid ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/orders/99999",
+          "host": ["{{baseUrl}}"],
+          "path": ["orders", "99999"]
+        },
+        "description": "Test case for non-existent order ID"
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

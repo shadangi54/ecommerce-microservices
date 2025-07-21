@@ -1,0 +1,500 @@
+{
+  "info": {
+    "_postman_id": "combined-ecommerce-microservices-2025",
+    "name": "Ecommerce Microservices - Combined API Collection",
+    "description": "Combined collection for testing both Product Service and Order Service APIs in the ecommerce microservices architecture",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "ecommerce-combined",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "patch": 0
+    }
+  },
+  "item": [
+    {
+      "name": "Product Service APIs",
+      "description": "All endpoints related to Product Service (Port: 8080)",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Fetches all products from the product service"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/{{productId}}",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Fetches a specific product by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Gaming Laptop\",\n    \"description\": \"High-performance gaming laptop with RTX 4080\",\n    \"price\": 1999.99,\n    \"category\": \"Electronics\",\n    \"imageUrl\": \"https://example.com/gaming-laptop.jpg\",\n    \"stockQuantity\": 25,\n    \"isActive\": true,\n    \"createdBy\": \"admin\",\n    \"modifiedBy\": \"admin\",\n    \"createdAt\": \"2025-07-21\",\n    \"modifiedAt\": \"2025-07-21\"\n}"
+            },
+            "url": {
+              "raw": "{{productServiceUrl}}/products",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Creates a new product in the system"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Existing Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Gaming Laptop\",\n    \"description\": \"Updated high-performance gaming laptop with RTX 4080 and 32GB RAM\",\n    \"price\": 2199.99,\n    \"category\": \"Electronics\",\n    \"imageUrl\": \"https://example.com/updated-gaming-laptop.jpg\",\n    \"stockQuantity\": 20,\n    \"isActive\": true,\n    \"createdBy\": \"admin\",\n    \"modifiedBy\": \"admin-update\",\n    \"createdAt\": \"2025-07-21\",\n    \"modifiedAt\": \"2025-07-21\"\n}"
+            },
+            "url": {
+              "raw": "{{productServiceUrl}}/products/{{productId}}",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Updates an existing product by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/{{productId}}",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Deletes a product by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products (All Parameters)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/search?name=Gaming&category=Electronics&minPrice=1000&maxPrice=3000&isActive=true&minStock=5&maxStock=50",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "search"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Gaming",
+                  "description": "Search by product name"
+                },
+                {
+                  "key": "category",
+                  "value": "Electronics",
+                  "description": "Filter by category"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000",
+                  "description": "Minimum price filter"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "3000",
+                  "description": "Maximum price filter"
+                },
+                {
+                  "key": "isActive",
+                  "value": "true",
+                  "description": "Filter by active status"
+                },
+                {
+                  "key": "minStock",
+                  "value": "5",
+                  "description": "Minimum stock level"
+                },
+                {
+                  "key": "maxStock",
+                  "value": "50",
+                  "description": "Maximum stock level"
+                }
+              ]
+            },
+            "description": "Search products with all available filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products (Partial Parameters)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/search?category=Electronics&minPrice=1000",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "search"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Electronics"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000"
+                }
+              ]
+            },
+            "description": "Search products with partial parameters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Low Stock Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/low-stock?threshold=10",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "low-stock"],
+              "query": [
+                {
+                  "key": "threshold",
+                  "value": "10",
+                  "description": "Stock threshold value"
+                }
+              ]
+            },
+            "description": "Get products with stock below threshold"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Order Service APIs",
+      "description": "All endpoints related to Order Service (Port: 8081)",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"John Doe\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"LAPTOP-001\",\n      \"quantity\": 1,\n      \"price\": 999.99\n    },\n    {\n      \"skuCode\": \"MOUSE-001\",\n      \"quantity\": 2,\n      \"price\": 25.50\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create a new order with products"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Orders by Customer Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{customerName}}",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{customerName}}"]
+            },
+            "description": "Fetch all orders for a specific customer"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{orderId}}",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            },
+            "description": "Fetch a specific order by its ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{orderId}}?status=COMPLETED",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{orderId}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "COMPLETED"
+                }
+              ]
+            },
+            "description": "Update the status of an existing order"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order - Electronics",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Jane Smith\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"PHONE-001\",\n      \"quantity\": 1,\n      \"price\": 699.99\n    },\n    {\n      \"skuCode\": \"CASE-001\",\n      \"quantity\": 1,\n      \"price\": 29.99\n    },\n    {\n      \"skuCode\": \"CHARGER-001\",\n      \"quantity\": 1,\n      \"price\": 39.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create an electronics order with multiple accessories"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order - Books",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Alice Johnson\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"BOOK-JAVA-001\",\n      \"quantity\": 2,\n      \"price\": 45.99\n    },\n    {\n      \"skuCode\": \"BOOK-SPRING-001\",\n      \"quantity\": 1,\n      \"price\": 59.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create a book order"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status - CANCELLED",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{orderId}}?status=CANCELLED",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{orderId}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "CANCELLED"
+                }
+              ]
+            },
+            "description": "Cancel an order by updating its status"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Orders - Non-existent Customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/NonExistentUser",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "NonExistentUser"]
+            },
+            "description": "Test case for customer with no orders"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order - Invalid ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/99999",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "99999"]
+            },
+            "description": "Test case for non-existent order ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Integration Scenarios",
+      "description": "End-to-end scenarios combining both services",
+      "item": [
+        {
+          "name": "1. Get All Products (for ordering)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Step 1: Fetch available products before creating an order"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Create Order with Product SKUs",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Integration Test User\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"LAPTOP-001\",\n      \"quantity\": 1,\n      \"price\": 1999.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Step 2: Create order using product SKU codes from product service"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Check Low Stock After Order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/low-stock?threshold=10",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "low-stock"],
+              "query": [
+                {
+                  "key": "threshold",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Step 3: Check if any products are running low on stock after order creation"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set dynamic variables if needed",
+          "// pm.globals.set('timestamp', new Date().toISOString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test scripts for all requests",
+          "pm.test('Response time is less than 5000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "pm.test('Response should not be an error', function () {",
+          "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202, 204]);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "productServiceUrl",
+      "value": "http://localhost:8080",
+      "type": "string",
+      "description": "Base URL for the Product Service API (Default: Port 8080)"
+    },
+    {
+      "key": "orderServiceUrl",
+      "value": "http://localhost:8081",
+      "type": "string",
+      "description": "Base URL for the Order Service API (Default: Port 8081)"
+    },
+    {
+      "key": "productId",
+      "value": "1",
+      "type": "string",
+      "description": "Dynamic product ID for testing"
+    },
+    {
+      "key": "orderId",
+      "value": "1",
+      "type": "string",
+      "description": "Dynamic order ID for testing"
+    },
+    {
+      "key": "customerName",
+      "value": "John Doe",
+      "type": "string",
+      "description": "Customer name for order queries"
+    }
+  ]
+}

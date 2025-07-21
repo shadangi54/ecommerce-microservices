@@ -55,12 +55,12 @@ public class ProductManager {
 	}
 
 	public List<ProductDTO> searchProducts(String name, String category, Double minPrice, Double maxPrice,
-			Boolean isActive, Integer minStock, Integer maxStock) {
+			Boolean isActive) {
 		LOGGER.info(
 				"Searching products with parameters - Name: {}, Category: {}, Min Price: {}, Max Price: {}, Is Active: {}, Min Stock: {}, Max Stock: {}",
-				name, category, minPrice, maxPrice, isActive, minStock, maxStock);
+				name, category, minPrice, maxPrice, isActive);
 		List<ProductDTO> products = productMapper
-				.toDTOs(productDAO.find(name, category, minPrice, maxPrice, isActive, minStock, maxStock));
+				.toDTOs(productDAO.find(name, category, minPrice, maxPrice, isActive));
 		return products;
 	}
 

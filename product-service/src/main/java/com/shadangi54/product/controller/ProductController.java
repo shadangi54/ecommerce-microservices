@@ -122,13 +122,11 @@ public class ProductController {
 	@GetMapping("/search")
 	public ResponseEntity<List<ProductDTO>> searchProductsByName(@RequestParam(required = false) String name,
 			@RequestParam(required = false) String category, @RequestParam(required = false) Double minPrice,
-			@RequestParam(required = false) Double maxPrice, @RequestParam(required = false) Boolean isActive,
-			@RequestParam(required = false) Integer minStock, @RequestParam(required = false) Integer maxStock) {
+			@RequestParam(required = false) Double maxPrice, @RequestParam(required = false) Boolean isActive) {
 		LOGGER.info("Searching products by name: {}, category: {}, price range: {}-{}, active: {}, stock range: {}-{}",
-				name, category, minPrice, maxPrice, isActive, minStock, maxStock);
+				name, category, minPrice, maxPrice, isActive);
 		try {
-			List<ProductDTO> products = productManager.searchProducts(name, category, minPrice, maxPrice, isActive,
-					minStock, maxStock);
+			List<ProductDTO> products = productManager.searchProducts(name, category, minPrice, maxPrice, isActive);
 			if (products.isEmpty()) {
 				LOGGER.warn("No products found matching the search criteria");
 				return ResponseEntity.noContent().build();
@@ -136,22 +134,6 @@ public class ProductController {
 			return ResponseEntity.ok(products);
 		} catch (Exception e) {
 			LOGGER.error("Error searching products", e);
-			return ResponseEntity.status(500).body(null);
-		}
-	}
-
-	@GetMapping("/low-stock")
-	public ResponseEntity<List<ProductDTO>> getLowStockProducts(@RequestParam(defaultValue = "10") Integer threshold) {
-		LOGGER.info("Fetching products with stock below threshold: {}", threshold);
-		try {
-			List<ProductDTO> lowStockProducts = productManager.getLowStockProducts(threshold);
-			if (lowStockProducts.isEmpty()) {
-				LOGGER.warn("No low stock products found");
-				return ResponseEntity.noContent().build();
-			}
-			return ResponseEntity.ok(lowStockProducts);
-		} catch (Exception e) {
-			LOGGER.error("Error fetching low stock products", e);
 			return ResponseEntity.status(500).body(null);
 		}
 	}

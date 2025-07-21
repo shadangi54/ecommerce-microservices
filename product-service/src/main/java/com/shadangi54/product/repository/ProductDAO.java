@@ -17,16 +17,12 @@ public interface ProductDAO extends JpaRepository<Product, Long>{
 	         + "(:category IS NULL OR p.category = :category) AND "
 	         + "(:minPrice IS NULL OR p.price >= :minPrice) AND "
 	         + "(:maxPrice IS NULL OR p.price <= :maxPrice) AND "
-	         + "(:isActive IS NULL OR p.isActive = :isActive) AND "
-	         + "(:minStock IS NULL OR p.stockQuantity >= :minStock) AND "
-	         + "(:maxStock IS NULL OR p.stockQuantity <= :maxStock)")
+	         + "(:isActive IS NULL OR p.isActive = :isActive)")
 	    List<Product> find(@Param("name") String name,
 	                       @Param("category") String category,
 	                       @Param("minPrice") Double minPrice,
 	                       @Param("maxPrice") Double maxPrice,
-	                       @Param("isActive") Boolean isActive,
-	                       @Param("minStock") Integer minStock,
-	                       @Param("maxStock") Integer maxStock);
+	                       @Param("isActive") Boolean isActive);
 	
 	@Query("SELECT p FROM Product p WHERE p.stockQuantity < :threshold")
 	List<Product> findLowStockProducts(@Param("threshold") Integer threshold);

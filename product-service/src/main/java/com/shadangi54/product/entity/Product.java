@@ -39,9 +39,6 @@ public class Product implements Serializable {
 	@Column(name = "image_url", length = 255)
 	private String imageUrl;
 
-	@Column(name = "stock_quantity")
-	private Integer stockQuantity;
-
 	@Column(name = "is_active", nullable = false)
 	private Boolean isActive;
 
