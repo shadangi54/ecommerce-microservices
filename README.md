@@ -422,7 +422,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Shadangi54**
 - GitHub: [@shadangi54](https://github.com/shadangi54)
-- Email: [your-email@example.com](mailto:your-email@example.com)
+- Email: [shadangi54@gmail.com](mailto:shadangi54@gmail.com)
 
 ## 🙏 Acknowledgments
 
