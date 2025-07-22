@@ -1,0 +1,1216 @@
+{
+  "info": {
+    "_postman_id": "ecommerce-microservices-complete-2025-v4",
+    "name": "Ecommerce Microservices - Complete API Collection v4.0",
+    "description": "Updated comprehensive collection for testing Product Service, Order Service, and Inventory Service APIs with integrated Feign client functionality. Order service now automatically handles inventory checks and updates through InventoryClient integration.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "ecommerce-complete-v4",
+    "version": {
+      "major": 4,
+      "minor": 0,
+      "patch": 0
+    }
+  },
+  "item": [
+    {
+      "name": "🛍️ Product Service APIs",
+      "description": "All endpoints related to Product Service (Port: 8080)",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Fetches all products from the product service"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/{{productId}}",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Fetches a specific product by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Gaming Laptop Pro\",\n    \"description\": \"High-performance gaming laptop with RTX 4080 and 32GB RAM\",\n    \"price\": 2499.99,\n    \"category\": \"Electronics\",\n    \"skuCode\": \"GAMING-LAPTOP-PRO-RTX4080\",\n    \"imageUrl\": \"https://example.com/gaming-laptop-pro.jpg\",\n    \"isActive\": true,\n    \"createdBy\": \"admin\",\n    \"modifiedBy\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{productServiceUrl}}/products",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Creates a new product in the system"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Existing Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Gaming Laptop Pro Max\",\n    \"description\": \"Updated high-performance gaming laptop with RTX 4090 and 64GB RAM\",\n    \"price\": 2899.99,\n    \"category\": \"Electronics\",\n    \"skuCode\": \"GAMING-LAPTOP-PRO-RTX4090\",\n    \"imageUrl\": \"https://example.com/updated-gaming-laptop-pro-max.jpg\",\n    \"isActive\": true,\n    \"modifiedBy\": \"admin-update\"\n}"
+            },
+            "url": {
+              "raw": "{{productServiceUrl}}/products/{{productId}}",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Updates an existing product by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/{{productId}}",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Soft deletes a product by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products (All Parameters)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/search?name=iPhone&category=Electronics&minPrice=500&maxPrice=1500&isActive=true",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "search"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "iPhone",
+                  "description": "Search by product name"
+                },
+                {
+                  "key": "category",
+                  "value": "Electronics",
+                  "description": "Filter by category"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "500",
+                  "description": "Minimum price filter"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "1500",
+                  "description": "Maximum price filter"
+                },
+                {
+                  "key": "isActive",
+                  "value": "true",
+                  "description": "Filter by active status"
+                }
+              ]
+            },
+            "description": "Search products with multiple filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products (Partial Parameters)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/search?category=Footwear&minPrice=100",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "search"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Footwear"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "100"
+                }
+              ]
+            },
+            "description": "Search products with partial parameters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Low Stock Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/low-stock?threshold=20",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "low-stock"],
+              "query": [
+                {
+                  "key": "threshold",
+                  "value": "20",
+                  "description": "Stock threshold value"
+                }
+              ]
+            },
+            "description": "Get products with stock below specified threshold"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Product Cache",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/clear-cache",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "clear-cache"]
+            },
+            "description": "Clear Redis cache for products (if Redis is enabled)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📦 Order Service APIs (Integrated with Inventory)",
+      "description": "Order Service endpoints with automatic inventory validation and updates (Port: 8081)",
+      "item": [
+        {
+          "name": "Create Order - Electronics (With Auto Inventory Check)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"John Doe\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 999.99\n    },\n    {\n      \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n      \"quantity\": 1,\n      \"price\": 499.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create order - automatically checks inventory availability and updates stock quantities. Order status is automatically set to PENDING."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Extract order number from response for future use",
+                  "if (pm.response.code === 201) {",
+                  "    const responseJson = pm.response.json();",
+                  "    if (responseJson.orderNumber) {",
+                  "        pm.globals.set('lastCreatedOrderNumber', responseJson.orderNumber);",
+                  "        console.log('Order Number saved: ' + responseJson.orderNumber);",
+                  "    }",
+                  "}",
+                  "",
+                  "pm.test('Order created successfully', function () {",
+                  "    pm.expect(pm.response.code).to.eq(201);",
+                  "});",
+                  "",
+                  "pm.test('Response contains order number', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('orderNumber');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Order - Footwear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Jane Smith\",\n  \"products\": [\n    {\n      \"skuCode\": \"NIKE-AIRMAX270-BW-10\",\n      \"quantity\": 2,\n      \"price\": 129.99\n    },\n    {\n      \"skuCode\": \"ADIDAS-UB22-BLACK-10\",\n      \"quantity\": 1,\n      \"price\": 189.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create footwear order with inventory validation"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order - Gaming Bundle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Gaming Enthusiast\",\n  \"products\": [\n    {\n      \"skuCode\": \"PS5-DIGITAL-WHITE\",\n      \"quantity\": 1,\n      \"price\": 399.99\n    },\n    {\n      \"skuCode\": \"DELL-XPS15-32GB-1TB\",\n      \"quantity\": 1,\n      \"price\": 1899.99\n    },\n    {\n      \"skuCode\": \"SONY-WH1000XM5-BLACK\",\n      \"quantity\": 1,\n      \"price\": 349.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create gaming bundle order with multiple high-value items"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Orders by Customer Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/customer/{{customerName}}",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "customer", "{{customerName}}"]
+            },
+            "description": "Fetch all orders for a specific customer"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by Order Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{orderNumber}}",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{orderNumber}}"]
+            },
+            "description": "Fetch a specific order by its order number"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by Last Created Order Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{lastCreatedOrderNumber}}",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{lastCreatedOrderNumber}}"]
+            },
+            "description": "Fetch the last created order using the dynamic order number"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status - COMPLETED",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{lastCreatedOrderNumber}}?status=COMPLETED",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{lastCreatedOrderNumber}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "COMPLETED"
+                }
+              ]
+            },
+            "description": "Mark an order as completed"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status - CANCELLED",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{lastCreatedOrderNumber}}?status=CANCELLED",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{lastCreatedOrderNumber}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "CANCELLED"
+                }
+              ]
+            },
+            "description": "Cancel an order by updating its status"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Orders - Non-existent Customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/customer/NonExistentUser",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "customer", "NonExistentUser"]
+            },
+            "description": "Test case for customer with no orders (should return 204 No Content)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📋 Inventory Service APIs",
+      "description": "All endpoints related to Inventory Service (Port: 8082)",
+      "item": [
+        {
+          "name": "Check Stock - Single SKU",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK",
+                  "description": "Single SKU code to check stock"
+                }
+              ]
+            },
+            "description": "Check stock for a single SKU code"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Stock - Multiple SKUs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK&skuCodes=GALAXY-S23-512-PHANTOM&skuCodes=NIKE-AIRMAX270-BW-10",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "GALAXY-S23-512-PHANTOM"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "NIKE-AIRMAX270-BW-10"
+                }
+              ]
+            },
+            "description": "Check stock for multiple SKU codes at once"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Stock - Electronics Bundle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory?skuCodes=PS5-DIGITAL-WHITE&skuCodes=SONY-WH1000XM5-BLACK&skuCodes=DELL-XPS15-32GB-1TB",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "PS5-DIGITAL-WHITE"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "SONY-WH1000XM5-BLACK"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "DELL-XPS15-32GB-1TB"
+                }
+              ]
+            },
+            "description": "Check stock for gaming electronics bundle"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Stock - Footwear Sizes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory?skuCodes=NIKE-AIRMAX270-BW-9&skuCodes=NIKE-AIRMAX270-BW-10&skuCodes=NIKE-AIRMAX270-BW-11&skuCodes=ADIDAS-UB22-BLACK-9&skuCodes=ADIDAS-UB22-BLACK-10",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "NIKE-AIRMAX270-BW-9"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "NIKE-AIRMAX270-BW-10"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "NIKE-AIRMAX270-BW-11"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "ADIDAS-UB22-BLACK-9"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "ADIDAS-UB22-BLACK-10"
+                }
+              ]
+            },
+            "description": "Check stock for different shoe sizes"
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Update Inventory - Multiple Items",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n    \"quantity\": 45,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n    \"quantity\": 30,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"NIKE-AIRMAX270-BW-10\",\n    \"quantity\": 25,\n    \"isInStock\": true\n  }\n]"
+            },
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"]
+            },
+            "description": "Bulk update inventory quantities for multiple SKUs (matches the updated endpoint that accepts List<InventoryDTO>)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Inventory - Restock High Demand Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"skuCode\": \"PS5-DIGITAL-WHITE\",\n    \"quantity\": 50,\n    \"isInStock\": true\n  }\n]"
+            },
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"]
+            },
+            "description": "Restock high-demand gaming console"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Inventory - Mark Out of Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"skuCode\": \"DYSON-V12-DETECT-SLIM\",\n    \"quantity\": 0,\n    \"isInStock\": false\n  }\n]"
+            },
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"]
+            },
+            "description": "Mark item as out of stock"
+          },
+          "response": []
+        },
+        {
+          "name": "Add New Product Inventory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"skuCode\": \"MACBOOK-PRO-16-M3-MAX\",\n    \"quantity\": 25,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"IPHONE15PRO-512-TITANIUM\",\n    \"quantity\": 40,\n    \"isInStock\": true\n  }\n]"
+            },
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"]
+            },
+            "description": "Add inventory for new products"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔄 Integration Test Scenarios",
+      "description": "End-to-end scenarios testing the integrated microservices flow",
+      "item": [
+        {
+          "name": "1️⃣ Setup - Add Test Inventory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n    \"quantity\": 50,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n    \"quantity\": 30,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"NIKE-AIRMAX270-BW-10\",\n    \"quantity\": 25,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"PS5-DIGITAL-WHITE\",\n    \"quantity\": 10,\n    \"isInStock\": true\n  }\n]"
+            },
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"]
+            },
+            "description": "Step 1: Setup initial inventory for testing"
+          },
+          "response": []
+        },
+        {
+          "name": "2️⃣ Browse - Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Step 2: Browse available products in catalog"
+          },
+          "response": []
+        },
+        {
+          "name": "3️⃣ Check - Verify Stock Levels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK&skuCodes=APPLE-WATCH8-45MM-GPS",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "APPLE-WATCH8-45MM-GPS"
+                }
+              ]
+            },
+            "description": "Step 3: Check stock availability before placing order"
+          },
+          "response": []
+        },
+        {
+          "name": "4️⃣ Order - Create with Auto Inventory Update",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Integration Test Customer\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 2,\n      \"price\": 999.99\n    },\n    {\n      \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n      \"quantity\": 1,\n      \"price\": 499.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Step 4: Create order with automatic inventory validation and stock reduction"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Save order details for next steps",
+                  "if (pm.response.code === 201) {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.globals.set('integrationTestOrderNumber', responseJson.orderNumber);",
+                  "    pm.globals.set('integrationTestCustomer', responseJson.customerName);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5️⃣ Verify - Check Updated Stock Levels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK&skuCodes=APPLE-WATCH8-45MM-GPS",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "APPLE-WATCH8-45MM-GPS"
+                }
+              ]
+            },
+            "description": "Step 5: Verify that inventory was automatically reduced after order creation"
+          },
+          "response": []
+        },
+        {
+          "name": "6️⃣ Retrieve - Get Customer Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/customer/{{integrationTestCustomer}}",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "customer", "{{integrationTestCustomer}}"]
+            },
+            "description": "Step 6: Retrieve all orders for the integration test customer"
+          },
+          "response": []
+        },
+        {
+          "name": "7️⃣ Complete - Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{integrationTestOrderNumber}}?status=COMPLETED",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{integrationTestOrderNumber}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "COMPLETED"
+                }
+              ]
+            },
+            "description": "Step 7: Mark order as completed"
+          },
+          "response": []
+        },
+        {
+          "name": "8️⃣ Monitor - Check Low Stock Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/low-stock?threshold=15",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "low-stock"],
+              "query": [
+                {
+                  "key": "threshold",
+                  "value": "15"
+                }
+              ]
+            },
+            "description": "Step 8: Check which products are running low on stock after orders"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🧪 Error & Edge Case Testing",
+      "description": "Test scenarios for error handling and edge cases with integrated services",
+      "item": [
+        {
+          "name": "❌ Order - Insufficient Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Test Customer\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1000,\n      \"price\": 999.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Test: Create order with quantity exceeding available stock (should fail with proper error message)"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Order should fail due to insufficient stock', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 500]);",
+                  "});",
+                  "",
+                  "pm.test('Should contain error message about stock', function () {",
+                  "    if (pm.response.code !== 201) {",
+                  "        // Error response expected",
+                  "        console.log('Expected error response for insufficient stock');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "❌ Order - Invalid SKU Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Test Customer\",\n  \"products\": [\n    {\n      \"skuCode\": \"INVALID-SKU-DOES-NOT-EXIST\",\n      \"quantity\": 1,\n      \"price\": 99.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Test: Create order with non-existent SKU code (should fail with proper error)"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Order - Empty Customer Name",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 999.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Test: Create order with empty customer name (should fail validation)"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Order - Null Products List",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Test Customer\",\n  \"products\": null\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Test: Create order with null products list (should fail validation)"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Inventory - Check Invalid SKU",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory?skuCodes=INVALID-SKU-CODE",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "INVALID-SKU-CODE"
+                }
+              ]
+            },
+            "description": "Test: Check stock for non-existent SKU"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Update Order - Invalid Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/{{lastCreatedOrderNumber}}?status=INVALID_STATUS",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "{{lastCreatedOrderNumber}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "INVALID_STATUS"
+                }
+              ]
+            },
+            "description": "Test: Update order with invalid status value"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "� Performance & Load Testing",
+      "description": "Performance testing scenarios for the integrated microservices",
+      "item": [
+        {
+          "name": "🚀 Bulk Stock Check - High Volume",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK&skuCodes=GALAXY-S23-512-PHANTOM&skuCodes=NIKE-AIRMAX270-BW-10&skuCodes=DELL-XPS15-32GB-1TB&skuCodes=SONY-WH1000XM5-BLACK&skuCodes=KINDLE-PW-8GB-BLACK&skuCodes=ADIDAS-UB22-BLACK-9&skuCodes=APPLE-WATCH8-45MM-GPS&skuCodes=DYSON-V12-DETECT-SLIM&skuCodes=PS5-DIGITAL-WHITE&skuCodes=MACBOOK-PRO-16-M3-MAX&skuCodes=IPHONE15PRO-512-TITANIUM",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "GALAXY-S23-512-PHANTOM"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "NIKE-AIRMAX270-BW-10"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "DELL-XPS15-32GB-1TB"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "SONY-WH1000XM5-BLACK"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "KINDLE-PW-8GB-BLACK"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "ADIDAS-UB22-BLACK-9"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "APPLE-WATCH8-45MM-GPS"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "DYSON-V12-DETECT-SLIM"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "PS5-DIGITAL-WHITE"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "MACBOOK-PRO-16-M3-MAX"
+                },
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE15PRO-512-TITANIUM"
+                }
+              ]
+            },
+            "description": "Performance test: Check stock for many SKUs at once"
+          },
+          "response": []
+        },
+        {
+          "name": "🚀 Large Order with Inventory Validation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Large Order Customer\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 5,\n      \"price\": 999.99\n    },\n    {\n      \"skuCode\": \"GALAXY-S23-512-PHANTOM\",\n      \"quantity\": 3,\n      \"price\": 1199.99\n    },\n    {\n      \"skuCode\": \"NIKE-AIRMAX270-BW-10\",\n      \"quantity\": 10,\n      \"price\": 129.99\n    },\n    {\n      \"skuCode\": \"DELL-XPS15-32GB-1TB\",\n      \"quantity\": 2,\n      \"price\": 1899.99\n    },\n    {\n      \"skuCode\": \"SONY-WH1000XM5-BLACK\",\n      \"quantity\": 4,\n      \"price\": 349.99\n    },\n    {\n      \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n      \"quantity\": 6,\n      \"price\": 499.99\n    },\n    {\n      \"skuCode\": \"PS5-DIGITAL-WHITE\",\n      \"quantity\": 1,\n      \"price\": 399.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Performance test: Create large order with multiple products and automatic inventory processing"
+          },
+          "response": []
+        },
+        {
+          "name": "🚀 Concurrent Orders Simulation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Concurrent Customer {{$randomInt}}\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 999.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Performance test: Simulate concurrent orders (run multiple times to test race conditions)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🎯 Kafka Event Testing",
+      "description": "Testing Kafka integration for order notifications",
+      "item": [
+        {
+          "name": "Create Order - Trigger Kafka Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Kafka Test Customer\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 999.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create order that triggers Kafka notification event to 'shadangi54-notification-topic'"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set dynamic timestamps and other variables",
+          "pm.globals.set('timestamp', new Date().toISOString());",
+          "pm.globals.set('currentDate', new Date().toISOString().split('T')[0]);",
+          "pm.globals.set('randomCustomer', 'Customer_' + Math.floor(Math.random() * 10000));"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test scripts for all requests",
+          "pm.test('Response time is acceptable (<10000ms)', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(10000);",
+          "});",
+          "",
+          "pm.test('Response should not be a server error (5xx) unless expected', function () {",
+          "    // Allow 500 errors for specific test cases (like insufficient stock)",
+          "    if (pm.request.name.includes('❌') || pm.request.name.includes('Error')) {",
+          "        console.log('Error test case - 5xx responses are expected');",
+          "    } else {",
+          "        pm.expect(pm.response.code).to.be.below(500);",
+          "    }",
+          "});",
+          "",
+          "pm.test('Response should have proper content type for non-204 responses', function () {",
+          "    if (pm.response.code !== 204 && pm.response.code < 500) {",
+          "        const contentType = pm.response.headers.get('Content-Type');",
+          "        if (contentType) {",
+          "            pm.expect(contentType).to.include('application/json');",
+          "        }",
+          "    }",
+          "});",
+          "",
+          "// Log response for debugging",
+          "console.log('Request:', pm.request.name);",
+          "console.log('Response Status:', pm.response.status);",
+          "console.log('Response Time:', pm.response.responseTime + 'ms');",
+          "",
+          "// Log any errors for debugging",
+          "if (pm.response.code >= 400) {",
+          "    console.log('Error Response Body:', pm.response.text());",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "productServiceUrl",
+      "value": "http://localhost:8080",
+      "type": "string",
+      "description": "Base URL for the Product Service API (Port: 8080)"
+    },
+    {
+      "key": "orderServiceUrl",
+      "value": "http://localhost:8081",
+      "type": "string",
+      "description": "Base URL for the Order Service API with Inventory Integration (Port: 8081)"
+    },
+    {
+      "key": "inventoryServiceUrl",
+      "value": "http://localhost:8082",
+      "type": "string",
+      "description": "Base URL for the Inventory Service API (Port: 8082)"
+    },
+    {
+      "key": "productId",
+      "value": "1",
+      "type": "string",
+      "description": "Dynamic product ID for testing"
+    },
+    {
+      "key": "orderNumber",
+      "value": "20250722120000-123e4567-e89b-12d3-a456-426614174000",
+      "type": "string",
+      "description": "Sample order number format (will be updated dynamically)"
+    },
+    {
+      "key": "lastCreatedOrderNumber",
+      "value": "",
+      "type": "string",
+      "description": "Dynamically set from order creation responses"
+    },
+    {
+      "key": "customerName",
+      "value": "John Doe",
+      "type": "string",
+      "description": "Customer name for order queries"
+    },
+    {
+      "key": "integrationTestOrderNumber",
+      "value": "",
+      "type": "string",
+      "description": "Order number from integration test scenario"
+    },
+    {
+      "key": "integrationTestCustomer",
+      "value": "",
+      "type": "string",
+      "description": "Customer name from integration test scenario"
+    }
+  ]
+}

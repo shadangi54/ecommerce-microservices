@@ -1,5 +1,6 @@
 package com.shadangi54.product.manager;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import com.shadangi54.product.DTO.ProductDTO;
 import com.shadangi54.product.mapper.ProductMapper;
 import com.shadangi54.product.repository.ProductDAO;
 
+import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -38,15 +41,24 @@ public class ProductManager {
 		return productMapper.toDTO(productDAO.findById(id).orElse(null));
 	}
 	
+	@Transactional(TxType.REQUIRES_NEW)
 	@Caching(put = { @CachePut(value = "PRODUCT_CACHE", key = "#result.id")},
 			evict = {@CacheEvict(value = "PRODUCT_LIST_CACHE", allEntries = true) })
 	public ProductDTO createProduct(ProductDTO productDTO) {
 		LOGGER.info("Creating new product: {}", productDTO);
+		if (productDTO.getId() == null) {
+			productDTO.setCreatedBy("system");
+			productDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		}
+		productDTO.setModifiedBy("system");
+		productDTO.setModifiedAt(new Timestamp(System.currentTimeMillis()));
 		ProductDTO savedProduct = productMapper.toDTO(productDAO.save(productMapper.toEntity(productDTO)));
 		LOGGER.info("Product created successfully with ID: {}", savedProduct.getId());
 		return savedProduct;
 	}
 	
+	
+	@Transactional(TxType.REQUIRES_NEW)
 	@Caching(evict = { @CacheEvict(value = "PRODUCT_CACHE", key = "#id"),
 			@CacheEvict(value = "PRODUCT_LIST_CACHE", allEntries = true) })
 	public void deleteProduct(Long id) {

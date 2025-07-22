@@ -10,12 +10,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.shadangi54.order.DAO.OrderDAO;
+import com.shadangi54.order.DTO.InventoryDTO;
 import com.shadangi54.order.DTO.OrderDTO;
+import com.shadangi54.order.DTO.OrderProductDTO;
 import com.shadangi54.order.DTO.OrderStatus;
 import com.shadangi54.order.entity.Order;
 import com.shadangi54.order.entity.OrderProduct;
+import com.shadangi54.order.exception.OrderServiceException;
+import com.shadangi54.order.feign.InventoryClient;
 import com.shadangi54.order.mapper.OrderMapper;
 
+import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -27,12 +33,14 @@ public class OrderManager {
 	private OrderDAO orderDAO;
 	
 	private OrderMapper orderMapper;
+	
+	private InventoryClient inventoryClient;
 
 	public List<OrderDTO> getAllOrdersForCustomer(String customerName) {
 		LOGGER.info("Fetching all orders for customer: {}", customerName);
 		if (customerName == null || customerName.trim().isEmpty()) {
 			LOGGER.error("Invalid customer name: {}", customerName);
-			throw new IllegalArgumentException("Customer name cannot be null or empty");
+			throw new OrderServiceException("Customer name cannot be null or empty");
 		}
 		
 		List<Order> orders = orderDAO.getAllOrdersForCustomer(customerName);
@@ -48,7 +56,7 @@ public class OrderManager {
 		LOGGER.info("Fetching order with ID: {}", orderNumber);
 		if (orderNumber == null) {
 			LOGGER.error("Invalid order ID: {}", orderNumber);
-			throw new IllegalArgumentException("Order ID must not be null");
+			throw new OrderServiceException("Order ID must not be null");
 		}
 
 		Order order = orderDAO.findByOrderNumber(orderNumber);
@@ -60,13 +68,42 @@ public class OrderManager {
 		LOGGER.info("Order found with ID: {}", orderNumber);
 		return orderMapper.toDTO(order);
 	}
-
+	
+	
+	@Transactional(TxType.REQUIRES_NEW)
 	public OrderDTO createOrder(OrderDTO orderDTO) {
 		LOGGER.info("Creating new order: {}", orderDTO);
 		if (orderDTO == null) {
 			LOGGER.error("OrderDTO cannot be null");
 			throw new IllegalArgumentException("OrderDTO cannot be null");
 		}
+		
+		List<String> skuCodes = orderDTO.getProducts().stream().map(OrderProductDTO::getSkuCode).toList();
+		List<InventoryDTO> inventoryList = inventoryClient.checkStock(skuCodes).getBody();
+		
+		if (inventoryList == null || inventoryList.isEmpty()) {
+			LOGGER.error("No inventory data returned for SKU codes: {}", skuCodes);
+			throw new OrderServiceException("No inventory data available for ordered products");
+		}
+		
+		// Check if all products from OrderDTO are in stock
+		for (OrderProductDTO productDTO : orderDTO.getProducts()) {
+			boolean inStock = inventoryList.stream()
+					.anyMatch(inv -> inv.getSkuCode().equals(productDTO.getSkuCode()) && inv.getQuantity() > 0 && productDTO.getQuantity() <= inv.getQuantity());
+			if (!inStock) {
+				LOGGER.error("Product with SKU code {} is not in stock", productDTO.getSkuCode());
+				throw new OrderServiceException(
+						"Product with SKU code " + productDTO.getSkuCode() + " is not in stock");
+			}
+			
+			//Update the inventoryList with the productDTO quantity ordered
+			 inventoryList.stream()
+		        .filter(inv -> inv.getSkuCode().equals(productDTO.getSkuCode()))
+		        .forEach(inv -> inv.setQuantity(inv.getQuantity() - productDTO.getQuantity()));
+			
+		}
+		
+		
 		
 		Order order = orderMapper.toEntity(orderDTO);
 		// Set metadata for the order
@@ -96,14 +133,19 @@ public class OrderManager {
 		order = orderDAO.save(order);
 
 		LOGGER.info("Order created successfully with ID: {}", order.getOrderNumber());
+		
+		// Update inventory after order creation
+		inventoryClient.updateInventory(inventoryList);
+		
 		return orderMapper.toDTO(order);
 	}
 
+	@Transactional(TxType.REQUIRES_NEW)
 	public OrderDTO updateOrder(String orderNumber, String status) {
 		LOGGER.info("Updating order with ID: {} to status: {}", orderNumber, status);
 		if (orderNumber == null) {
 			LOGGER.error("Invalid order ID: {}", orderNumber);
-			throw new IllegalArgumentException("Order ID must not be null");
+			throw new OrderServiceException("Order ID must not be null");
 		}
 
 		Order order = orderDAO.findByOrderNumber(orderNumber);

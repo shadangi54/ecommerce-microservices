@@ -1,6 +1,7 @@
 package com.shadangi54.product.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.hibernate.annotations.SQLRestriction;
 
@@ -35,6 +36,9 @@ public class Product implements Serializable {
 
 	@Column(name = "category", length = 50)
 	private String category;
+	
+	@Column(name = "sku_code", nullable = false, unique = true, length = 50)
+	private String skuCode;
 
 	@Column(name = "image_url", length = 255)
 	private String imageUrl;
@@ -49,8 +53,8 @@ public class Product implements Serializable {
 	private String modifiedBy;
 
 	@Column(name = "created_date", nullable = false)
-	private String createdAt;
+	private Date createdAt;
 
 	@Column(name = "updated_date", nullable = false)
-	private String modifiedAt;
+	private Date modifiedAt;
 }

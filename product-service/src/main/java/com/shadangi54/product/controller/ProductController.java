@@ -1,5 +1,6 @@
 package com.shadangi54.product.controller;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -70,10 +71,6 @@ public class ProductController {
 	public ResponseEntity<String> createProduct(@RequestBody ProductDTO productDTO) {
 		LOGGER.info("Creating new product: {}", productDTO);
 		try {
-			productDTO.setCreatedBy("system");
-			productDTO.setModifiedBy("system");
-			productDTO.setCreatedAt(String.valueOf(System.currentTimeMillis()));
-			productDTO.setModifiedAt(String.valueOf(System.currentTimeMillis()));
 			productManager.createProduct(productDTO);
 			return ResponseEntity.status(201).body("Product created successfully");
 		} catch (Exception e) {
@@ -92,8 +89,6 @@ public class ProductController {
 				return ResponseEntity.notFound().build();
 			}
 			productDTO.setId(id); // Ensure the ID is set for the update
-			productDTO.setModifiedBy("system");
-			productDTO.setModifiedAt(String.valueOf(System.currentTimeMillis()));
 			productManager.createProduct(productDTO); // Reuse create method for simplicity
 			return ResponseEntity.ok("Product updated successfully");
 		} catch (Exception e) {
