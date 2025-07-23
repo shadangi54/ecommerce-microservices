@@ -1,0 +1,1629 @@
+{
+  "info": {
+    "_postman_id": "ecommerce-microservices-complete-final-2025",
+    "name": "🛒 Ecommerce Microservices - Complete Final Collection",
+    "description": "Comprehensive API collection for testing all microservices via Gateway with Circuit Breaker and Rate Limiting. This collection includes all endpoints discovered from controllers and supports both routing methods.\n\n🏗️ **Architecture:**\n- Gateway Service: Port 9090 (Central API Gateway with Circuit Breaker & Rate Limiting)\n- Product Service: Port 8080 (Direct access)\n- Order Service: Port 8081 (Direct access)\n- Inventory Service: Port 8082 (Direct access)\n- Notification Service: Port 8083 (Direct access)\n\n🔄 **Access Methods:**\n1. **Via Gateway (Recommended)** - Use {{gatewayUrl}} for production-like routing with protection\n2. **Direct Service Access** - Use individual service URLs for development/debugging\n\n⚡ **New Features:**\n- Circuit Breaker Protection\n- Rate Limiting (10 requests/second for products, 5 for orders, 15 for inventory)\n- Enhanced Error Handling\n- Rate Limit Testing Scenarios\n\n📋 **Test Categories:**\n- Gateway Service Health & Fallback APIs\n- Product Service CRUD Operations (via Gateway & Direct)\n- Order Service Management (via Gateway & Direct)\n- Inventory Service Stock Management (via Gateway & Direct)\n- Rate Limiting Tests\n- Circuit Breaker Tests\n- End-to-End Integration Testing\n- Error Handling & Resilience Testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "ecommerce-complete-final",
+    "version": {
+      "major": 2,
+      "minor": 0,
+      "patch": 0
+    }
+  },
+  "item": [
+    {
+      "name": "🎯 Gateway Service APIs",
+      "description": "Gateway health checks, route management, and fallback endpoints",
+      "item": [
+        {
+          "name": "Gateway Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/actuator/health",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["actuator", "health"]
+            },
+            "description": "Check if Gateway Service is running and healthy"
+          },
+          "response": []
+        },
+        {
+          "name": "View Gateway Routes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/actuator/gateway/routes",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["actuator", "gateway", "routes"]
+            },
+            "description": "View all configured routes in the gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Gateway Fallback - General",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/fallback",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["fallback"]
+            },
+            "description": "Test general fallback endpoint"
+          },
+          "response": []
+        },
+        {
+          "name": "Gateway Fallback - Product Service",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/fallback/product",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["fallback", "product"]
+            },
+            "description": "Test product service fallback"
+          },
+          "response": []
+        },
+        {
+          "name": "Gateway Fallback - Order Service",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/fallback/order",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["fallback", "order"]
+            },
+            "description": "Test order service fallback"
+          },
+          "response": []
+        },
+        {
+          "name": "Gateway Fallback - Inventory Service",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/fallback/inventory",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["fallback", "inventory"]
+            },
+            "description": "Test inventory service fallback"
+          },
+          "response": []
+        },
+        {
+          "name": "Product Service Health via Gateway",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/health/product",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["health", "product"]
+            },
+            "description": "Check product service health via gateway routing"
+          },
+          "response": []
+        },
+        {
+          "name": "Order Service Health via Gateway",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/health/order",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["health", "order"]
+            },
+            "description": "Check order service health via gateway routing"
+          },
+          "response": []
+        },
+        {
+          "name": "Inventory Service Health via Gateway",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/health/inventory",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["health", "inventory"]
+            },
+            "description": "Check inventory service health via gateway routing"
+          },
+          "response": []
+        },
+        {
+          "name": "Notification Service Health via Gateway",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/health/notification",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["health", "notification"]
+            },
+            "description": "Check notification service health via gateway routing"
+          },
+          "response": []
+        },
+        {
+          "name": "Gateway Fallback - Rate Limit",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/fallback/rate-limit",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["fallback", "rate-limit"]
+            },
+            "description": "Test rate limit fallback endpoint"
+          },
+          "response": []
+        },
+        {
+          "name": "View Circuit Breaker Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/actuator/circuitbreakers",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["actuator", "circuitbreakers"]
+            },
+            "description": "View circuit breaker status and metrics"
+          },
+          "response": []
+        },
+        {
+          "name": "View Gateway Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/actuator/metrics",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["actuator", "metrics"]
+            },
+            "description": "View gateway metrics including rate limiting"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "⚡ Rate Limiting Tests",
+      "description": "Test rate limiting functionality across different services",
+      "item": [
+        {
+          "name": "Rate Limit - Product Service (10 requests)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "rate-test-user-1",
+                "description": "User ID for rate limiting"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Test rate limiting on product service - Run this multiple times quickly to trigger rate limit (10 req/sec limit)"
+          },
+          "response": []
+        },
+        {
+          "name": "Rate Limit - Order Service (5 requests)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "rate-test-user-2",
+                "description": "User ID for rate limiting"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/customer/TestCustomer",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "customer", "TestCustomer"]
+            },
+            "description": "Test rate limiting on order service - Run this multiple times quickly to trigger rate limit (5 req/sec limit)"
+          },
+          "response": []
+        },
+        {
+          "name": "Rate Limit - Inventory Service (15 requests)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "rate-test-user-3",
+                "description": "User ID for rate limiting"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK"
+                }
+              ]
+            },
+            "description": "Test rate limiting on inventory service - Run this multiple times quickly to trigger rate limit (15 req/sec limit)"
+          },
+          "response": []
+        },
+        {
+          "name": "Burst Rate Test - Multiple SKUs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "burst-test-user",
+                "description": "User ID for burst testing"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK,APPLE-WATCH8-45MM-GPS,NIKE-AIRMAX270-BW-10",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK,APPLE-WATCH8-45MM-GPS,NIKE-AIRMAX270-BW-10"
+                }
+              ]
+            },
+            "description": "Test burst capacity - should allow up to 30 requests in burst for inventory service"
+          },
+          "response": []
+        },
+        {
+          "name": "Different User Rate Test",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "different-user-{{$randomInt}}",
+                "description": "Different user ID to test separate rate limits"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Test with different user ID - should have separate rate limit bucket"
+          },
+          "response": []
+        },
+        {
+          "name": "IP-based Rate Limit Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Test IP-based rate limiting (no X-User-ID header)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔧 Circuit Breaker Tests",
+      "description": "Test circuit breaker functionality and fallback mechanisms",
+      "item": [
+        {
+          "name": "Force Circuit Breaker - Invalid Product",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products/999999999",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products", "999999999"]
+            },
+            "description": "Trigger circuit breaker by calling non-existent product repeatedly"
+          },
+          "response": []
+        },
+        {
+          "name": "Force Circuit Breaker - Invalid Order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/INVALID-ORDER-999999",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "INVALID-ORDER-999999"]
+            },
+            "description": "Trigger circuit breaker by calling non-existent order repeatedly"
+          },
+          "response": []
+        },
+        {
+          "name": "Circuit Breaker Status Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/actuator/circuitbreakers",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["actuator", "circuitbreakers"]
+            },
+            "description": "Check circuit breaker status and metrics"
+          },
+          "response": []
+        },
+        {
+          "name": "Circuit Breaker Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/actuator/circuitbreakerevents",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["actuator", "circuitbreakerevents"]
+            },
+            "description": "View circuit breaker events and state transitions"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Product Fallback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/fallback/product",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["fallback", "product"]
+            },
+            "description": "Direct test of product service fallback"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Order Fallback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/fallback/order",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["fallback", "order"]
+            },
+            "description": "Direct test of order service fallback"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Inventory Fallback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/fallback/inventory",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["fallback", "inventory"]
+            },
+            "description": "Direct test of inventory service fallback"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔄 Resilience & Load Testing",
+      "description": "Comprehensive resilience and load testing scenarios",
+      "item": [
+        {
+          "name": "Load Test - Product Creation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-ID",
+                "value": "load-test-user-{{$randomInt}}",
+                "description": "Random user for load testing"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Load Test Product {{$randomInt}}\",\n  \"description\": \"Product created during load testing\",\n  \"price\": {{$randomPrice}},\n  \"category\": \"Load Test\",\n  \"skuCode\": \"LOAD-TEST-{{$randomInt}}\",\n  \"stockQuantity\": {{$randomInt}},\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Create products under load to test rate limiting and circuit breaker"
+          },
+          "response": []
+        },
+        {
+          "name": "Load Test - Order Creation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-ID",
+                "value": "order-load-user-{{$randomInt}}",
+                "description": "Random user for order load testing"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Load Test Customer {{$randomInt}}\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 1099.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/orders",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create orders under load to test rate limiting"
+          },
+          "response": []
+        },
+        {
+          "name": "Load Test - Inventory Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "inventory-load-user-{{$randomInt}}",
+                "description": "Random user for inventory load testing"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK"
+                }
+              ]
+            },
+            "description": "Check inventory under load to test rate limiting"
+          },
+          "response": []
+        },
+        {
+          "name": "Stress Test - High Volume Requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "stress-test-user",
+                "description": "Stress test user"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "High volume requests to trigger rate limiting - run multiple times rapidly"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Rate Limit Headers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "header-test-user",
+                "description": "Test rate limit headers"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Test to check rate limit headers in response"
+          },
+          "response": []
+        },
+        {
+          "name": "Recovery Test - After Rate Limit",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "recovery-test-user",
+                "description": "Test recovery after rate limit"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Test recovery after hitting rate limit - wait 60 seconds before running"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🛍️ Product Service APIs - Via Gateway",
+      "description": "Product management endpoints accessed through Gateway Service",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Fetch all products via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products/{{productId}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Fetch specific product by ID via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New iPhone 15 Pro\",\n  \"description\": \"Latest iPhone with advanced features\",\n  \"price\": 1199.99,\n  \"category\": \"Electronics\",\n  \"skuCode\": \"IPHONE15PRO-128-NATURAL\",\n  \"stockQuantity\": 50,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Create a new product via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated iPhone 15 Pro\",\n  \"description\": \"Updated description for iPhone\",\n  \"price\": 1099.99,\n  \"category\": \"Electronics\",\n  \"skuCode\": \"IPHONE15PRO-128-NATURAL\",\n  \"stockQuantity\": 75,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/products/{{productId}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Update existing product via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products/{{productId}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Delete product by ID via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products/search?name=iPhone&category=Electronics&minPrice=500&maxPrice=2000&isActive=true",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products", "search"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "iPhone",
+                  "description": "Search by product name"
+                },
+                {
+                  "key": "category",
+                  "value": "Electronics",
+                  "description": "Filter by category"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "500",
+                  "description": "Minimum price filter"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "2000",
+                  "description": "Maximum price filter"
+                },
+                {
+                  "key": "isActive",
+                  "value": "true",
+                  "description": "Filter by active status"
+                }
+              ]
+            },
+            "description": "Search products with multiple filters via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Product Cache",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products/clear-cache",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products", "clear-cache"]
+            },
+            "description": "Clear product cache via gateway"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📦 Order Service APIs - Via Gateway",
+      "description": "Order management endpoints accessed through Gateway Service",
+      "item": [
+        {
+          "name": "Get Orders by Customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/customer/{{customerName}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "customer", "{{customerName}}"]
+            },
+            "description": "Get all orders for a specific customer via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/{{orderNumber}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "{{orderNumber}}"]
+            },
+            "description": "Get specific order by order number via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"{{customerName}}\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 1099.99\n    },\n    {\n      \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n      \"quantity\": 1,\n      \"price\": 399.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/orders",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create new order with automatic inventory validation via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/{{orderNumber}}?status=COMPLETED",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "{{orderNumber}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "COMPLETED",
+                  "description": "New order status (PENDING, COMPLETED, CANCELLED)"
+                }
+              ]
+            },
+            "description": "Update order status via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/{{orderNumber}}?status=CANCELLED",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "{{orderNumber}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "CANCELLED"
+                }
+              ]
+            },
+            "description": "Cancel order via gateway"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📋 Inventory Service APIs - Via Gateway",
+      "description": "Inventory management endpoints accessed through Gateway Service",
+      "item": [
+        {
+          "name": "Check Stock - Single SKU",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK",
+                  "description": "Single SKU to check"
+                }
+              ]
+            },
+            "description": "Check stock for single SKU via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Stock - Multiple SKUs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK,APPLE-WATCH8-45MM-GPS,NIKE-AIRMAX270-BW-10",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK,APPLE-WATCH8-45MM-GPS,NIKE-AIRMAX270-BW-10",
+                  "description": "Multiple SKUs to check"
+                }
+              ]
+            },
+            "description": "Check stock for multiple SKUs via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Inventory - Single Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n    \"quantity\": 100,\n    \"isInStock\": true\n  }\n]"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"]
+            },
+            "description": "Update inventory for single item via gateway"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Inventory - Bulk",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n    \"quantity\": 50,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n    \"quantity\": 75,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"NIKE-AIRMAX270-BW-10\",\n    \"quantity\": 30,\n    \"isInStock\": true\n  }\n]"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"]
+            },
+            "description": "Bulk update inventory for multiple items via gateway"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🛍️ Product Service APIs - Direct",
+      "description": "Product management endpoints with direct service access (Development/Debug)",
+      "item": [
+        {
+          "name": "Get All Products (Direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Fetch all products directly from product service"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID (Direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/{{productId}}",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Fetch specific product by ID directly"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Product (Direct)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Direct Access Product\",\n  \"description\": \"Product created via direct service call\",\n  \"price\": 299.99,\n  \"category\": \"Test\",\n  \"skuCode\": \"DIRECT-TEST-001\",\n  \"stockQuantity\": 25,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{productServiceUrl}}/products",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Create a new product directly"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products (Direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/products/search?name=Test&isActive=true",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["products", "search"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Test"
+                },
+                {
+                  "key": "isActive",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Search products directly"
+          },
+          "response": []
+        },
+        {
+          "name": "Product Service Health (Direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{productServiceUrl}}/actuator/health",
+              "host": ["{{productServiceUrl}}"],
+              "path": ["actuator", "health"]
+            },
+            "description": "Check product service health directly"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📦 Order Service APIs - Direct",
+      "description": "Order management endpoints with direct service access (Development/Debug)",
+      "item": [
+        {
+          "name": "Get Orders by Customer (Direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders/customer/{{customerName}}",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders", "customer", "{{customerName}}"]
+            },
+            "description": "Get customer orders directly from order service"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Order (Direct)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Direct Test Customer\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 1099.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{orderServiceUrl}}/orders",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create order directly (bypasses gateway)"
+          },
+          "response": []
+        },
+        {
+          "name": "Order Service Health (Direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{orderServiceUrl}}/actuator/health",
+              "host": ["{{orderServiceUrl}}"],
+              "path": ["actuator", "health"]
+            },
+            "description": "Check order service health directly"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📋 Inventory Service APIs - Direct",
+      "description": "Inventory management endpoints with direct service access (Development/Debug)",
+      "item": [
+        {
+          "name": "Check Stock (Direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK"
+                }
+              ]
+            },
+            "description": "Check stock directly from inventory service"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Inventory (Direct)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n    \"quantity\": 200,\n    \"isInStock\": true\n  }\n]"
+            },
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/inventory",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["inventory"]
+            },
+            "description": "Update inventory directly"
+          },
+          "response": []
+        },
+        {
+          "name": "Inventory Service Health (Direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{inventoryServiceUrl}}/actuator/health",
+              "host": ["{{inventoryServiceUrl}}"],
+              "path": ["actuator", "health"]
+            },
+            "description": "Check inventory service health directly"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔔 Notification Service APIs - Direct",
+      "description": "Notification service endpoints with direct access",
+      "item": [
+        {
+          "name": "Notification Service Health (Direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notificationServiceUrl}}/actuator/health",
+              "host": ["{{notificationServiceUrl}}"],
+              "path": ["actuator", "health"]
+            },
+            "description": "Check notification service health directly"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔄 End-to-End Integration Tests",
+      "description": "Complete workflow testing scenarios",
+      "item": [
+        {
+          "name": "1. Setup Initial Inventory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n    \"quantity\": 100,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n    \"quantity\": 50,\n    \"isInStock\": true\n  },\n  {\n    \"skuCode\": \"NIKE-AIRMAX270-BW-10\",\n    \"quantity\": 75,\n    \"isInStock\": true\n  }\n]"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"]
+            },
+            "description": "Setup initial inventory levels for testing"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Create Test Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Integration Test Product\",\n  \"description\": \"Product for end-to-end testing\",\n  \"price\": 599.99,\n  \"category\": \"Test Category\",\n  \"skuCode\": \"INTEGRATION-TEST-001\",\n  \"stockQuantity\": 10,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Create a test product for integration testing"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Verify Product Created",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products/search?name=Integration Test",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products", "search"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Integration Test"
+                }
+              ]
+            },
+            "description": "Verify the test product was created successfully"
+          },
+          "response": []
+        },
+        {
+          "name": "4. Check Stock Before Order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK,APPLE-WATCH8-45MM-GPS",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK,APPLE-WATCH8-45MM-GPS"
+                }
+              ]
+            },
+            "description": "Check inventory levels before creating order"
+          },
+          "response": []
+        },
+        {
+          "name": "5. Create Integration Test Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Integration Test Customer\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 2,\n      \"price\": 1099.99\n    },\n    {\n      \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n      \"quantity\": 1,\n      \"price\": 399.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/orders",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create order that will automatically validate and update inventory"
+          },
+          "response": []
+        },
+        {
+          "name": "6. Verify Stock After Order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK,APPLE-WATCH8-45MM-GPS",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "IPHONE14PRO-256-BLACK,APPLE-WATCH8-45MM-GPS"
+                }
+              ]
+            },
+            "description": "Verify inventory was automatically updated after order creation"
+          },
+          "response": []
+        },
+        {
+          "name": "7. Get Customer Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/customer/Integration Test Customer",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "customer", "Integration Test Customer"]
+            },
+            "description": "Retrieve all orders for the test customer"
+          },
+          "response": []
+        },
+        {
+          "name": "8. Complete Order",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/{{lastOrderNumber}}?status=COMPLETED",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "{{lastOrderNumber}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "COMPLETED"
+                }
+              ]
+            },
+            "description": "Mark the order as completed"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "❌ Error Handling & Circuit Breaker Tests",
+      "description": "Test error scenarios and fallback mechanisms",
+      "item": [
+        {
+          "name": "Test Invalid Product ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products/99999",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products", "99999"]
+            },
+            "description": "Test handling of non-existent product ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Invalid Customer Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/customer/NonExistentCustomer123",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "customer", "NonExistentCustomer123"]
+            },
+            "description": "Test handling of non-existent customer"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Invalid SKU Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory?skuCodes=INVALID-SKU-CODE",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory"],
+              "query": [
+                {
+                  "key": "skuCodes",
+                  "value": "INVALID-SKU-CODE"
+                }
+              ]
+            },
+            "description": "Test handling of invalid SKU codes"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Order with Insufficient Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Test Customer\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1000,\n      \"price\": 1099.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/orders",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Test order creation with quantity exceeding stock"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Invalid Order Status Update",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/INVALID-ORDER-123?status=INVALID_STATUS",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "INVALID-ORDER-123"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "INVALID_STATUS"
+                }
+              ]
+            },
+            "description": "Test updating order with invalid status"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set dynamic variables for testing",
+          "pm.globals.set('timestamp', new Date().toISOString());",
+          "pm.globals.set('currentDate', new Date().toISOString().split('T')[0]);",
+          "pm.globals.set('randomCustomerSuffix', Math.floor(Math.random() * 10000));",
+          "pm.globals.set('customerName', 'TestCustomer_' + pm.globals.get('randomCustomerSuffix'));",
+          "",
+          "// Set default product ID if not exists",
+          "if (!pm.globals.get('productId')) {",
+          "    pm.globals.set('productId', '1');",
+          "}",
+          "",
+          "// Set default order number if not exists",
+          "if (!pm.globals.get('orderNumber')) {",
+          "    pm.globals.set('orderNumber', 'ORDER-' + Date.now());",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test scripts for all requests",
+          "pm.test('Response time is acceptable (<5000ms)', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "pm.test('Response should not contain server error (5xx)', function () {",
+          "    pm.expect(pm.response.code).to.be.below(500);",
+          "});",
+          "",
+          "// Extract and set variables from response",
+          "if (pm.response.code === 201 && pm.request.name.includes('Create')) {",
+          "    try {",
+          "        const responseJson = pm.response.json();",
+          "        ",
+          "        // Save order number from order creation",
+          "        if (responseJson.orderNumber) {",
+          "            pm.globals.set('lastOrderNumber', responseJson.orderNumber);",
+          "            console.log('Saved order number:', responseJson.orderNumber);",
+          "        }",
+          "        ",
+          "        // Save product ID from product creation",
+          "        if (responseJson.id) {",
+          "            pm.globals.set('lastProductId', responseJson.id);",
+          "            console.log('Saved product ID:', responseJson.id);",
+          "        }",
+          "    } catch (e) {",
+          "        console.log('Response is not JSON or missing expected fields');",
+          "    }",
+          "}",
+          "",
+          "// Log response for debugging",
+          "console.log('Request:', pm.request.name);",
+          "console.log('Response Status:', pm.response.status);",
+          "console.log('Response Time:', pm.response.responseTime + 'ms');",
+          "",
+          "// Log any errors for debugging",
+          "if (pm.response.code >= 400) {",
+          "    console.log('Error Response Body:', pm.response.text());",
+          "}",
+          "",
+          "// Rate Limiting Tests",
+          "if (pm.request.name.includes('Rate Limit')) {",
+          "    pm.test('Rate limit headers should be present when rate limited', function () {",
+          "        if (pm.response.code === 429) {",
+          "            pm.expect(pm.response.headers.has('X-RateLimit-Remaining')).to.be.true;",
+          "            pm.expect(pm.response.headers.has('X-RateLimit-Retry-After-Seconds')).to.be.true;",
+          "            console.log('Rate limit triggered - remaining:', pm.response.headers.get('X-RateLimit-Remaining'));",
+          "        }",
+          "    });",
+          "    ",
+          "    pm.test('Rate limit response should contain proper error structure', function () {",
+          "        if (pm.response.code === 429) {",
+          "            const responseJson = pm.response.json();",
+          "            pm.expect(responseJson).to.have.property('status', 'RATE_LIMIT_EXCEEDED');",
+          "            pm.expect(responseJson).to.have.property('errorCode', 'TOO_MANY_REQUESTS');",
+          "            pm.expect(responseJson).to.have.property('retryAfter');",
+          "        }",
+          "    });",
+          "}",
+          "",
+          "// Circuit Breaker Tests",
+          "if (pm.request.name.includes('Circuit Breaker') || pm.request.name.includes('Fallback')) {",
+          "    pm.test('Circuit breaker response should contain proper fallback structure', function () {",
+          "        if (pm.response.code === 503) {",
+          "            const responseJson = pm.response.json();",
+          "            pm.expect(responseJson).to.have.property('status', 'CIRCUIT_BREAKER_OPEN');",
+          "            pm.expect(responseJson).to.have.property('errorCode', 'SERVICE_UNAVAILABLE');",
+          "            pm.expect(responseJson).to.have.property('suggestion');",
+          "        }",
+          "    });",
+          "}",
+          "",
+          "// Load Testing",
+          "if (pm.request.name.includes('Load Test') || pm.request.name.includes('Stress Test')) {",
+          "    pm.test('Load test response time should be reasonable', function () {",
+          "        pm.expect(pm.response.responseTime).to.be.below(10000); // 10 seconds max for load tests",
+          "    });",
+          "    ",
+          "    pm.test('Load test should handle rate limiting gracefully', function () {",
+          "        if (pm.response.code === 429) {",
+          "            console.log('Rate limiting triggered during load test - this is expected behavior');",
+          "        } else {",
+          "            pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+          "        }",
+          "    });",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "gatewayUrl",
+      "value": "http://localhost:9090",
+      "type": "string",
+      "description": "Gateway Service URL (Port: 9090)"
+    },
+    {
+      "key": "productServiceUrl",
+      "value": "http://localhost:8080",
+      "type": "string",
+      "description": "Product Service Direct URL (Port: 8080)"
+    },
+    {
+      "key": "orderServiceUrl",
+      "value": "http://localhost:8081",
+      "type": "string",
+      "description": "Order Service Direct URL (Port: 8081)"
+    },
+    {
+      "key": "inventoryServiceUrl",
+      "value": "http://localhost:8082",
+      "type": "string",
+      "description": "Inventory Service Direct URL (Port: 8082)"
+    },
+    {
+      "key": "notificationServiceUrl",
+      "value": "http://localhost:8083",
+      "type": "string",
+      "description": "Notification Service Direct URL (Port: 8083)"
+    },
+    {
+      "key": "productId",
+      "value": "1",
+      "type": "string",
+      "description": "Dynamic product ID for testing"
+    },
+    {
+      "key": "orderNumber",
+      "value": "",
+      "type": "string",
+      "description": "Dynamic order number for testing"
+    },
+    {
+      "key": "customerName",
+      "value": "John Doe",
+      "type": "string",
+      "description": "Test customer name"
+    },
+    {
+      "key": "lastOrderNumber",
+      "value": "",
+      "type": "string",
+      "description": "Last created order number"
+    },
+    {
+      "key": "lastProductId",
+      "value": "",
+      "type": "string",
+      "description": "Last created product ID"
+    },
+    {
+      "key": "rateLimitTestUser",
+      "value": "rate-test-user-1",
+      "type": "string",
+      "description": "User ID for rate limiting tests"
+    },
+    {
+      "key": "circuitBreakerTestCounter",
+      "value": "0",
+      "type": "string",
+      "description": "Counter for circuit breaker tests"
+    },
+    {
+      "key": "randomPrice",
+      "value": "299.99",
+      "type": "string",
+      "description": "Random price for load testing"
+    }
+  ]
+}

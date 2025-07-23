@@ -76,10 +76,5 @@ public class ProductManager {
 		return products;
 	}
 
-	public List<ProductDTO> getLowStockProducts(Integer threshold) {
-		LOGGER.info("Fetching products with stock quantity less than: {}", threshold);
-		List<ProductDTO> lowStockProducts = productMapper.toDTOs(productDAO.findLowStockProducts(threshold));
-		return lowStockProducts;
-	}
 
 }

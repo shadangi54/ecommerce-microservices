@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS product (
     is_active BOOLEAN NOT NULL,
     created_by VARCHAR(50),
     modified_by VARCHAR(50),
-    created_date VARCHAR(255) NOT NULL,
-    updated_date VARCHAR(255) NOT NULL
+    created_date DATE NOT NULL,
+    updated_date DATE NOT NULL
 );

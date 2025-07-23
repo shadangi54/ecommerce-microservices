@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.shadangi54.order.DTO.InventoryDTO;
 
 
-@FeignClient(name = "${inventory.service.name}", url = "${inventory.service.url}")
+@FeignClient(name = "${inventory.service.name}", url = "${gatway.service.url}")
 public interface InventoryClient {
 	
 	@GetMapping("/inventory")

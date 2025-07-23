@@ -12,6 +12,16 @@ import com.shadangi54.product.entity.Product;
 @Repository
 public interface ProductDAO extends JpaRepository<Product, Long>{
 	
+	/**
+	 * Custom query to find products based on various criteria.
+	 * 
+	 * @param name     the name of the product (optional)
+	 * @param category the category of the product (optional)
+	 * @param minPrice the minimum price of the product (optional)
+	 * @param maxPrice the maximum price of the product (optional)
+	 * @param isActive whether the product is active (optional)
+	 * @return a list of products matching the criteria
+	 */
 	@Query("SELECT p FROM Product p WHERE "
 	         + "(:name IS NULL OR p.name LIKE %:name%) AND "
 	         + "(:category IS NULL OR p.category = :category) AND "
@@ -24,6 +34,4 @@ public interface ProductDAO extends JpaRepository<Product, Long>{
 	                       @Param("maxPrice") Double maxPrice,
 	                       @Param("isActive") Boolean isActive);
 	
-	@Query("SELECT p FROM Product p WHERE p.stockQuantity < :threshold")
-	List<Product> findLowStockProducts(@Param("threshold") Integer threshold);
 }
