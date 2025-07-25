@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -18,6 +19,7 @@ import com.shadangi54.gateway.ratelimiter.CustomRateLimiterGatewayFilterFactory;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 public class GatewayServiceApplication {
 
 	private static final Logger logger = LoggerFactory.getLogger(GatewayServiceApplication.class);
@@ -28,10 +30,6 @@ public class GatewayServiceApplication {
 
 	@Bean
 	public RouteLocator customRouteLocator(RouteLocatorBuilder builder,
-			@Value("${product.service.url}") String productServiceUrl,
-			@Value("${order.service.url}") String orderServiceUrl,
-			@Value("${inventory.service.url}") String inventoryServiceUrl,
-			@Value("${notification.service.url}") String notificationServiceUrl,
 //			RedisRateLimiter redisRateLimiter
 			CustomRateLimiterGatewayFilterFactory customRateLimiter
 			) {
@@ -49,51 +47,51 @@ public class GatewayServiceApplication {
 //												.setKeyResolver(exchange -> Mono.just("product-service-rate-limit")))
 										.filter(customRateLimiter.apply(c->c.setRouteId("product-service-rate-limit")))
 										)
-								.uri(productServiceUrl))
+								.uri("lb://product-service"))
 				
 				// Order Service Routes with Circuit Breaker
 				.route("order-service",
 						r -> r.path("/orders/**")
 								.filters(f -> f
 										.circuitBreaker(config -> config.setName("order-service-circuit-breaker")
-										.setFallbackUri("forward:/fallback/product"))
+										.setFallbackUri("forward:/fallback/order"))
 										.retry(retryConfig -> retryConfig.setRetries(3))
 //										.requestRateLimiter(rl-> rl
 //												.setRateLimiter(redisRateLimiter)
 //												.setKeyResolver(exchange -> Mono.just("order-service-rate-limit")))
 										.filter(customRateLimiter.apply(c->c.setRouteId("order-service-rate-limit")))
 										)
-								.uri(orderServiceUrl))
+								.uri("lb://order-service"))
 				
 				// Inventory Service Routes with Circuit Breaker
 				.route("inventory-service",
 						r -> r.path("/inventory/**")
 								.filters(f -> f
 										.circuitBreaker(config -> config.setName("inventory-service-circuit-breaker")
-										.setFallbackUri("forward:/fallback/product"))
+										.setFallbackUri("forward:/fallback/inventory"))
 										.retry(retryConfig -> retryConfig.setRetries(3))
 //										.requestRateLimiter(rl-> rl
 //												.setRateLimiter(redisRateLimiter)
 //												.setKeyResolver(exchange -> Mono.just("inventory-service-rate-limit")))
 										.filter(customRateLimiter.apply(c->c.setRouteId("inventory-service-rate-limit")))
 										)
-								.uri(inventoryServiceUrl))
+								.uri("lb://inventory-service"))
 				.route("product-service-health", r -> r.path("/health/product")
 						.filters(f -> f.rewritePath("/health/product", "/actuator/health"))
-						.uri(productServiceUrl))
+						.uri("lb://product-service"))
 				
 				// Health Check Routes (without circuit breaker for monitoring)
 				.route("order-service-health",
 						r -> r.path("/health/order")
 						.filters(f -> f.rewritePath("/health/order", "/actuator/health"))
-						.uri(orderServiceUrl))
+						.uri("lb://order-service"))
 				.route("inventory-service-health", r -> r.path("/health/inventory")
 						.filters(f -> f.rewritePath("/health/inventory", "/actuator/health"))
-						.uri(inventoryServiceUrl))
+						.uri("lb://inventory-service"))
 				.route("notification-service-health",
 						r -> r.path("/health/notification")
 								.filters(f -> f.rewritePath("/health/notification", "/actuator/health"))
-								.uri(notificationServiceUrl))
+								.uri("lb://notification-service"))
 				.build();
 	}
 

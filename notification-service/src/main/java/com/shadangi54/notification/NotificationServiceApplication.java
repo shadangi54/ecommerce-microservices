@@ -3,11 +3,13 @@ package com.shadangi54.notification;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.kafka.annotation.KafkaListener;
 
 import com.shadangi54.notification.event.OrderPlacedEvent;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 public class NotificationServiceApplication {
 	
 	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(NotificationServiceApplication.class);
