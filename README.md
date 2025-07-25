@@ -1,104 +1,67 @@
-﻿# ðŸ›’ E-commerce Microservices Architecture
+# 🛒 E-commerce Microservices Architecture
 
-[![Sprin    subgraph "ðŸ” Service Discovery"
-        Discovery[Discovery Service<br/>Eureka Server<br/>Port: 8761]
-    end
-    
-    subgraph "ðŸ“¦ Microservices"t](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://openjdk.org/)
 [![Maven](https://img.shields.io/badge/Maven-3.x-blue.svg)](https://maven.apache.org/)
-[![H2](https://img.shields.io/badge/Databa### 5ï¸âƒ£ Verify Services
-
-**Service Discovery Dashboard:**
-- **Eureka Dashboard**: http://localhost:8761
-- **### ðŸ§ª **Test Categories**
-- **ðŸ” Service Discovery** - Test service registration, health checks, and automatic discovery
-- **ðŸŽ¯ Gateway Service APIs** - Routing, health checks, fallback testing
-- **âš¡ Rate Limiting** - Test API throttling and custom rate limit responses
-- **ðŸ”„ Circuit Breaker** - Test fault tolerance and fallback mechanisms
-- **ðŸ›ï¸ Product Service APIs** - CRUD operations via gateway
-- **ðŸ“¦ Order Service APIs** - Order processing via gateway  
-- **ðŸ“‹ Inventory Service APIs** - Stock management via gateway
-- **ðŸ”„ Integration Scenarios** - End-to-end workflow via gateway
-- **âŒ Error Testing** - Gateway error handling and circuit breaker
-- **ðŸš€ Performance Testing** - Gateway performance and load balancing Services**: View all registered microservice instances
-
-**Via Gateway (Recommended):**
-- **Product Service**: http://localhost:9090/products
-- **Order Service**: http://localhost:9090/orders/customer/John%20Doe
-- **Inventory Service**: http://localhost:9090/inventory?skuCodes=IPHONE14PRO-256-BLACK
-- **Gateway Health**: http://localhost:9090/actuator/health
-- **Gateway Routes**: http://localhost:9090/actuator/gateway/routes
-- **Fallback Endpoints**: http://localhost:9090/fallback
-
-**Direct Service Access (Development Only):**
-- **Discovery Service**: http://localhost:8761
-- **Product Service**: http://localhost:8080/products
-- **Order Service**: http://localhost:8081/orders/customer/John%20Doe
-- **Inventory Service**: http://localhost:8082/inventory?skuCodes=IPHONE14PRO-256-BLACK
-
-**H2 Consoles**: 
-- **Product**: http://localhost:8080/h2-console
-- **Order**: http://localhost:8081/h2-console
-- **Inventory**: http://localhost:8082/h2-consolehttps://www.h2database.com/)
+[![H2](https://img.shields.io/badge/Database-H2-darkblue.svg)](https://www.h2database.com/)
 [![Kafka](https://img.shields.io/badge/Apache%20Kafka-3.x-red.svg)](https://kafka.apache.org/)
 [![Gateway](https://img.shields.io/badge/Spring%20Cloud%20Gateway-4.x-purple.svg)](https://spring.io/projects/spring-cloud-gateway)
 
 A comprehensive microservices-based e-commerce platform built with **Spring Boot**, featuring automatic inventory management, order processing, and real-time notifications through **Apache Kafka**. The system demonstrates enterprise-level patterns including **Feign Client** integration, **distributed caching**, and **event-driven architecture**.
 
-## ðŸ—ï¸ Architecture Overview
+## 🏗️ Architecture Overview
 
 ```mermaid
 graph TB
     %% External Layer
-    subgraph "ðŸŒ External Layer"
+    subgraph "🌐 External Layer"
         Client[Client Applications<br/>Web/Mobile/API]
         LoadBalancer[Load Balancer<br/>Optional]
     end
     
     %% Gateway Layer
-    subgraph "ðŸŽ¯ Gateway Layer"
-        Gateway[Gateway Service<br/>Port: 9090<br/>Routing â€¢ Rate Limiting â€¢ Circuit Breaker]
+    subgraph "🎯 Gateway Layer"
+        Gateway[Gateway Service<br/>Port: 9090<br/>Routing • Rate Limiting • Circuit Breaker]
     end
     
     %% Service Registry Layer
-    subgraph "ðŸ” Service Registry"
-        Discovery[Discovery Service<br/>Eureka Server<br/>Port: 8761<br/>Registration â€¢ Health Checks]
+    subgraph "🔍 Service Registry"
+        Discovery[Discovery Service<br/>Eureka Server<br/>Port: 8761<br/>Registration • Health Checks]
     end
     
     %% Business Services Layer
-    subgraph "ðŸ¢ Business Services Layer"
+    subgraph "🏢 Business Services Layer"
         direction TB
-        subgraph "ðŸ›’ Order Domain"
+        subgraph "🛒 Order Domain"
             OS[Order Service<br/>Port: 8081<br/>Order Processing]
         end
         
-        subgraph "ðŸ“¦ Product Domain"
+        subgraph "📦 Product Domain"
             PS[Product Service<br/>Port: 8080<br/>Catalog Management]
         end
         
-        subgraph "ðŸ“Š Inventory Domain"
+        subgraph "📊 Inventory Domain"
             IS[Inventory Service<br/>Port: 8082<br/>Stock Management]
         end
         
-        subgraph "ðŸ“¢ Communication Domain"
+        subgraph "📢 Communication Domain"
             NS[Notification Service<br/>Port: 8083<br/>Event Processing]
         end
     end
     
     %% Data Layer
-    subgraph "ðŸ’¾ Data Layer"
+    subgraph "💾 Data Layer"
         direction LR
-        PDB[(Product DB<br/>H2 Memory<br/>Products â€¢ Categories)]
-        ODB[(Order DB<br/>H2 Memory<br/>Orders â€¢ Line Items)]
-        IDB[(Inventory DB<br/>H2 Memory<br/>Stock â€¢ Reservations)]
+        PDB[(Product DB<br/>H2 Memory<br/>Products • Categories)]
+        ODB[(Order DB<br/>H2 Memory<br/>Orders • Line Items)]
+        IDB[(Inventory DB<br/>H2 Memory<br/>Stock • Reservations)]
     end
     
     %% Infrastructure Layer
-    subgraph "ðŸ”§ Infrastructure Layer"
+    subgraph "🔧 Infrastructure Layer"
         direction LR
         Kafka[Apache Kafka<br/>localhost:9092<br/>Event Streaming]
-        Redis[Redis Server<br/>localhost:6379<br/>Caching â€¢ Rate Limiting]
+        Redis[Redis Server<br/>localhost:6379<br/>Caching • Rate Limiting]
     end
     
     %% Client Connections
@@ -142,59 +105,58 @@ graph TB
     class PDB,ODB,IDB dbBox
     class Kafka,Redis infraBox
     class Client,LoadBalancer clientBox
-
 ```
 
-## ðŸš€ Key Features
+## 🚀 Key Features
 
-### ðŸ” **Discovery Service**
-- âœ… **Service Registration** - Automatic service registration with Netflix Eureka
-- âœ… **Service Discovery** - Dynamic service location and health monitoring
-- âœ… **Load Balancing** - Client-side load balancing for service instances
-- âœ… **Health Monitoring** - Continuous health checks and service status tracking
-- âœ… **Self-Healing** - Automatic removal of unhealthy service instances
-- âœ… **Dynamic Scaling** - Support for multiple instances of services
-- âœ… **Instance Management** - Real-time service instance registration/deregistration
+### 🔍 **Discovery Service**
+- ✅ **Service Registration** - Automatic service registration with Netflix Eureka
+- ✅ **Service Discovery** - Dynamic service location and health monitoring
+- ✅ **Load Balancing** - Client-side load balancing for service instances
+- ✅ **Health Monitoring** - Continuous health checks and service status tracking
+- ✅ **Self-Healing** - Automatic removal of unhealthy service instances
+- ✅ **Dynamic Scaling** - Support for multiple instances of services
+- ✅ **Instance Management** - Real-time service instance registration/deregistration
 
-### ðŸŽ¯ **Gateway Service**
-- âœ… **Centralized Routing** - Single entry point for all services
-- âœ… **Rate Limiting** - Redis-based rate limiting with custom responses
-- âœ… **Circuit Breaker** - Resilience4j integration with fallback controllers
-- âœ… **Load Balancing** - Distribute requests across service instances
-- âœ… **CORS Handling** - Cross-origin resource sharing configuration
-- âœ… **Custom Fallback** - Graceful degradation with detailed error responses
-- âœ… **Request/Response Logging** - Centralized monitoring and tracing
-- âœ… **Health Monitoring** - Aggregate health checks for all services
-- âœ… **Retry Mechanism** - Automatic retry on transient failures
-- âœ… **Backward Compatibility** - Support for legacy API endpoints
+### 🎯 **Gateway Service**
+- ✅ **Centralized Routing** - Single entry point for all services
+- ✅ **Rate Limiting** - Redis-based rate limiting with custom responses
+- ✅ **Circuit Breaker** - Resilience4j integration with fallback controllers
+- ✅ **Load Balancing** - Distribute requests across service instances
+- ✅ **CORS Handling** - Cross-origin resource sharing configuration
+- ✅ **Custom Fallback** - Graceful degradation with detailed error responses
+- ✅ **Request/Response Logging** - Centralized monitoring and tracing
+- ✅ **Health Monitoring** - Aggregate health checks for all services
+- ✅ **Retry Mechanism** - Automatic retry on transient failures
+- ✅ **Backward Compatibility** - Support for legacy API endpoints
 
-### ðŸ›ï¸ **Product Service**
-- âœ… **CRUD Operations** - Create, read, update, delete products
-- âœ… **Advanced Search** - Filter by name, category, price range, status
-- âœ… **Low Stock Monitoring** - Automatic low stock alerts
-- âœ… **Redis Caching** - Performance optimization with distributed caching
-- âœ… **SKU Management** - Unique product identification system
+### 🛒 **Product Service**
+- ✅ **CRUD Operations** - Create, read, update, delete products
+- ✅ **Advanced Search** - Filter by name, category, price range, status
+- ✅ **Low Stock Monitoring** - Automatic low stock alerts
+- ✅ **Redis Caching** - Performance optimization with distributed caching
+- ✅ **SKU Management** - Unique product identification system
 
-### ðŸ“¦ **Order Service** 
-- âœ… **Automated Order Processing** - Create orders with real-time validation
-- âœ… **Inventory Integration** - Automatic stock validation via **Feign Client**
-- âœ… **Order Status Management** - PENDING â†’ COMPLETED â†’ CANCELLED workflow
-- âœ… **Customer Order History** - Track all customer orders
-- âœ… **Event Publishing** - Kafka integration for order notifications
+### 📦 **Order Service** 
+- ✅ **Automated Order Processing** - Create orders with real-time validation
+- ✅ **Inventory Integration** - Automatic stock validation via **Feign Client**
+- ✅ **Order Status Management** - PENDING → COMPLETED → CANCELLED workflow
+- ✅ **Customer Order History** - Track all customer orders
+- ✅ **Event Publishing** - Kafka integration for order notifications
 
-### ðŸ“‹ **Inventory Service**
-- âœ… **Real-time Stock Tracking** - Live inventory management
-- âœ… **Bulk Operations** - Update multiple SKUs simultaneously
-- âœ… **Stock Validation** - Prevent overselling with automatic checks
-- âœ… **SKU-based Management** - Granular inventory control
-- âœ… **Soft Delete Support** - Maintain data integrity
+### 📋 **Inventory Service**
+- ✅ **Real-time Stock Tracking** - Live inventory management
+- ✅ **Bulk Operations** - Update multiple SKUs simultaneously
+- ✅ **Stock Validation** - Prevent overselling with automatic checks
+- ✅ **SKU-based Management** - Granular inventory control
+- ✅ **Soft Delete Support** - Maintain data integrity
 
-### ðŸ”” **Notification Service**
-- âœ… **Event-Driven Notifications** - Kafka-based messaging
-- âœ… **Order Notifications** - Real-time order status updates
-- âœ… **Scalable Architecture** - Asynchronous message processing
+### 📣 **Notification Service**
+- ✅ **Event-Driven Notifications** - Kafka-based messaging
+- ✅ **Order Notifications** - Real-time order status updates
+- ✅ **Scalable Architecture** - Asynchronous message processing
 
-## ðŸ› ï¸ Technology Stack
+## 🛠️ Technology Stack
 
 | **Category** | **Technology** | **Version** | **Purpose** |
 |--------------|----------------|-------------|-------------|
@@ -213,74 +175,74 @@ graph TB
 | **Mapping** | MapStruct | 1.5.x | Entity-DTO mapping |
 | **Validation** | Bean Validation | 3.x | Input validation |
 
-## ðŸ“ Project Structure
+## 📂 Project Structure
 
 ```
 ecommerce-microservices/
-â”œâ”€â”€ ðŸ“¦ discovery-service/           # Service Discovery microservice
-â”‚   â”œâ”€â”€ src/main/java/com/shadangi54/discovery/
-â”‚   â”‚   â””â”€â”€ DiscoveryServiceApplication.java # Eureka Server
-â”‚   â””â”€â”€ src/main/resources/
-â”‚       â””â”€â”€ application.properties # Discovery configuration
-â”‚
-â”œâ”€â”€ ðŸ“¦ gateway-service/             # API Gateway microservice
-â”‚   â”œâ”€â”€ src/main/java/com/shadangi54/gateway/
-â”‚   â”‚   â”œâ”€â”€ controller/            # Fallback controllers
-â”‚   â”‚   â”œâ”€â”€ ratelimiter/           # Custom rate limiter implementation
-â”‚   â”‚   â””â”€â”€ GatewayServiceApplication.java
-â”‚   â””â”€â”€ src/main/resources/
-â”‚       â””â”€â”€ application.properties # Gateway configuration
-â”‚
-â”œâ”€â”€ ðŸ“¦ product-service/               # Product management microservice
-â”‚   â”œâ”€â”€ src/main/java/com/shadangi54/product/
-â”‚   â”‚   â”œâ”€â”€ controller/              # REST API endpoints
-â”‚   â”‚   â”œâ”€â”€ service/                 # Business logic layer
-â”‚   â”‚   â”œâ”€â”€ repository/              # Data access layer
-â”‚   â”‚   â”œâ”€â”€ entity/                  # JPA entities
-â”‚   â”‚   â”œâ”€â”€ dto/                     # Data transfer objects
-â”‚   â”‚   â””â”€â”€ mapper/                  # Entity-DTO mappers
-â”‚   â””â”€â”€ src/main/resources/
-â”‚       â”œâ”€â”€ application.properties   # Configuration
-â”‚       â”œâ”€â”€ schema.sql              # Database schema
-â”‚       â””â”€â”€ data.sql                # Sample data
-â”‚
-â”œâ”€â”€ ðŸ“¦ order-service/                # Order processing microservice
-â”‚   â”œâ”€â”€ src/main/java/com/shadangi54/order/
-â”‚   â”‚   â”œâ”€â”€ controller/             # Order API endpoints
-â”‚   â”‚   â”œâ”€â”€ manager/                # Order business logic
-â”‚   â”‚   â”œâ”€â”€ feign/                  # Feign client interfaces
-â”‚   â”‚   â”œâ”€â”€ entity/                 # Order entities
-â”‚   â”‚   â”œâ”€â”€ dto/                    # Order DTOs
-â”‚   â”‚   â””â”€â”€ event/                  # Kafka event classes
-â”‚   â””â”€â”€ src/main/resources/
-â”‚       â”œâ”€â”€ application.properties  # Configuration
-â”‚       â””â”€â”€ schema.sql             # Database schema
-â”‚
-â”œâ”€â”€ ðŸ“¦ inventory-service/           # Inventory management microservice
-â”‚   â”œâ”€â”€ src/main/java/com/shadangi54/inventory/
-â”‚   â”‚   â”œâ”€â”€ controller/            # Inventory API endpoints
-â”‚   â”‚   â”œâ”€â”€ service/               # Inventory business logic
-â”‚   â”‚   â”œâ”€â”€ entity/                # Inventory entities
-â”‚   â”‚   â””â”€â”€ dto/                   # Inventory DTOs
-â”‚   â””â”€â”€ src/main/resources/
-â”‚       â”œâ”€â”€ application.properties # Configuration
-â”‚       â”œâ”€â”€ schema.sql            # Database schema
-â”‚       â””â”€â”€ data.sql              # Sample inventory data
-â”‚
-â”œâ”€â”€ ðŸ“¦ notification-service/        # Event processing microservice
-â”‚   â””â”€â”€ src/main/java/com/shadangi54/notification/
-â”‚       â”œâ”€â”€ consumer/              # Kafka message consumers
-â”‚       â””â”€â”€ event/                 # Event handler classes
-â”‚
-â”œâ”€â”€ ðŸ“„ Ecommerce_Microservices_Gateway_v5.postman_collection.json
-â”œâ”€â”€ ðŸ“„ Ecommerce_Microservices_Complete_v4.postman_collection.json  # Legacy
-â”œâ”€â”€ ðŸ“„ README.md                    # This file
-â””â”€â”€ ðŸ“„ Architecture.txt             # Additional architecture notes
+├── 📦 discovery-service/           # Service Discovery microservice
+│   ├── src/main/java/com/shadangi54/discovery/
+│   │   └── DiscoveryServiceApplication.java # Eureka Server
+│   └── src/main/resources/
+│       └── application.properties # Discovery configuration
+│
+├── 📦 gateway-service/             # API Gateway microservice
+│   ├── src/main/java/com/shadangi54/gateway/
+│   │   ├── controller/            # Fallback controllers
+│   │   ├── ratelimiter/           # Custom rate limiter implementation
+│   │   └── GatewayServiceApplication.java
+│   └── src/main/resources/
+│       └── application.properties # Gateway configuration
+│
+├── 📦 product-service/               # Product management microservice
+│   ├── src/main/java/com/shadangi54/product/
+│   │   ├── controller/              # REST API endpoints
+│   │   ├── service/                 # Business logic layer
+│   │   ├── repository/              # Data access layer
+│   │   ├── entity/                  # JPA entities
+│   │   ├── dto/                     # Data transfer objects
+│   │   └── mapper/                  # Entity-DTO mappers
+│   └── src/main/resources/
+│       ├── application.properties   # Configuration
+│       ├── schema.sql              # Database schema
+│       └── data.sql                # Sample data
+│
+├── 📦 order-service/                # Order processing microservice
+│   ├── src/main/java/com/shadangi54/order/
+│   │   ├── controller/             # Order API endpoints
+│   │   ├── manager/                # Order business logic
+│   │   ├── feign/                  # Feign client interfaces
+│   │   ├── entity/                 # Order entities
+│   │   ├── dto/                    # Order DTOs
+│   │   └── event/                  # Kafka event classes
+│   └── src/main/resources/
+│       ├── application.properties  # Configuration
+│       └── schema.sql             # Database schema
+│
+├── 📦 inventory-service/           # Inventory management microservice
+│   ├── src/main/java/com/shadangi54/inventory/
+│   │   ├── controller/            # Inventory API endpoints
+│   │   ├── service/               # Inventory business logic
+│   │   ├── entity/                # Inventory entities
+│   │   └── dto/                   # Inventory DTOs
+│   └── src/main/resources/
+│       ├── application.properties # Configuration
+│       ├── schema.sql            # Database schema
+│       └── data.sql              # Sample inventory data
+│
+├── 📦 notification-service/        # Event processing microservice
+│   └── src/main/java/com/shadangi54/notification/
+│       ├── consumer/              # Kafka message consumers
+│       └── event/                 # Event handler classes
+│
+├── 📄 Ecommerce_Microservices_Gateway_v5.postman_collection.json
+├── 📄 Ecommerce_Microservices_Complete_v4.postman_collection.json  # Legacy
+├── 📄 README.md                    # This file
+└── 📄 Architecture.txt             # Additional architecture notes
 ```
 
-## ðŸ”§ Service Configuration
+## 🔧 Service Configuration
 
-### **ðŸ” Discovery Service** - Port: 8761
+### **🔍 Discovery Service** - Port: 8761
 ```properties
 spring.application.name=discovery-service
 server.port=8761
@@ -292,7 +254,7 @@ eureka.client.fetch-registry=false
 # Eureka Dashboard available at: http://localhost:8761
 ```
 
-### **ðŸŽ¯ Gateway Service** - Port: 9090
+### **🎯 Gateway Service** - Port: 9090
 ```properties
 spring.application.name=gateway-service
 server.port=9090
@@ -321,7 +283,7 @@ spring.data.redis.port=6379
 # API routes: /products, /orders, /inventory with circuit breaker and rate limiting
 ```
 
-### **ðŸ›ï¸ Product Service** - Port: 8080
+### **🛒 Product Service** - Port: 8080
 ```properties
 spring.application.name=product-service
 server.port=8080
@@ -335,7 +297,7 @@ eureka.client.fetch-registry=true
 eureka.instance.prefer-ip-address=true
 ```
 
-### **ðŸ“¦ Order Service** - Port: 8081
+### **📦 Order Service** - Port: 8081
 ```properties
 spring.application.name=order-service
 server.port=8081
@@ -356,7 +318,7 @@ spring.kafka.bootstrap-servers=localhost:9092
 spring.kafka.template.default-topic=shadangi54-notification-topic
 ```
 
-### **ðŸ“‹ Inventory Service** - Port: 8082
+### **📋 Inventory Service** - Port: 8082
 ```properties
 spring.application.name=inventory-service
 server.port=8082
@@ -369,7 +331,7 @@ eureka.client.fetch-registry=true
 eureka.instance.prefer-ip-address=true
 ```
 
-### **ðŸ”” Notification Service** - Port: 8083
+### **📣 Notification Service** - Port: 8083
 ```properties
 spring.application.name=notification-service
 server.port=8083
@@ -385,7 +347,7 @@ spring.kafka.bootstrap-servers=localhost:9092
 spring.kafka.consumer.group-id=notification-group
 ```
 
-## ðŸš€ Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - **Java 17+** - [Download OpenJDK](https://openjdk.org/)
@@ -393,13 +355,13 @@ spring.kafka.consumer.group-id=notification-group
 - **Redis Server** - [Download Redis](https://redis.io/download) (Required for rate limiting)
 - **Apache Kafka** - [Download Kafka](https://kafka.apache.org/downloads) (Optional for notifications)
 
-### 1ï¸âƒ£ Clone the Repository
+### 1️⃣ Clone the Repository
 ```bash
 git clone https://github.com/shadangi54/ecommerce-microservices.git
 cd ecommerce-microservices
 ```
 
-### 2ï¸âƒ£ Start Redis (Required for Rate Limiting)
+### 2️⃣ Start Redis (Required for Rate Limiting)
 ```bash
 # Start Redis server
 redis-server
@@ -409,7 +371,7 @@ redis-cli ping
 # Should return: PONG
 ```
 
-### 3ï¸âƒ£ Start Kafka (Optional - for notifications)
+### 3️⃣ Start Kafka (Optional - for notifications)
 ```bash
 # Start Zookeeper
 bin/zookeeper-server-start.sh config/zookeeper.properties
@@ -422,7 +384,7 @@ bin/kafka-topics.sh --create --topic shadangi54-notification-topic \
   --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 ```
 
-### 4ï¸âƒ£ Start the Services
+### 4️⃣ Start the Services
 
 **Terminal 1 - Discovery Service (Start First):**
 ```bash
@@ -460,7 +422,11 @@ cd notification-service
 mvn clean spring-boot:run
 ```
 
-### 5ï¸âƒ£ Verify Services
+### 5️⃣ Verify Services
+
+**Service Discovery Dashboard:**
+- **Eureka Dashboard**: http://localhost:8761
+- **Services**: View all registered microservice instances
 
 **Via Gateway (Recommended):**
 - **Product Service**: http://localhost:9090/products
@@ -471,6 +437,7 @@ mvn clean spring-boot:run
 - **Fallback Endpoints**: http://localhost:9090/fallback
 
 **Direct Service Access (Development Only):**
+- **Discovery Service**: http://localhost:8761
 - **Product Service**: http://localhost:8080/products
 - **Order Service**: http://localhost:8081/orders/customer/John%20Doe
 - **Inventory Service**: http://localhost:8082/inventory?skuCodes=IPHONE14PRO-256-BLACK
@@ -480,89 +447,90 @@ mvn clean spring-boot:run
 - **Order**: http://localhost:8081/h2-console
 - **Inventory**: http://localhost:8082/h2-console
 
-## ðŸ§ª API Testing with Postman
+## 🧪 API Testing with Postman
 
 ### Import the Collection
 1. Download the **Postman Collection v5.0 (Gateway)** from the repository
-2. Open Postman â†’ **Import** â†’ Select `Ecommerce_Microservices_Gateway_v5.postman_collection.json`
+2. Open Postman → **Import** → Select `Ecommerce_Microservices_Gateway_v5.postman_collection.json`
 3. The collection includes comprehensive test scenarios for both Gateway and Direct access:
 
-### ðŸš€ **Gateway API Access (Port 9090)**
+### 🚀 **Gateway API Access (Port 9090)**
 ```
-ðŸ“ Gateway API Routes (Port 9090)
-â”œâ”€â”€ ðŸ›ï¸ Products via Gateway (/products)
-â”‚   â”œâ”€â”€ GET    /products                        â†’ List all products
-â”‚   â”œâ”€â”€ POST   /products                        â†’ Create new product
-â”‚   â”œâ”€â”€ GET    /products/{id}                   â†’ Get product by ID
-â”‚   â”œâ”€â”€ PUT    /products/{id}                   â†’ Update product
-â”‚   â””â”€â”€ DELETE /products/{id}                   â†’ Delete product
-â”‚
-â”œâ”€â”€ ðŸ“¦ Orders via Gateway (/orders)
-â”‚   â”œâ”€â”€ GET    /orders/customer/{name}          â†’ Get customer orders
-â”‚   â”œâ”€â”€ POST   /orders                          â†’ Create new order
-â”‚   â”œâ”€â”€ PUT    /orders/{id}/status              â†’ Update order status
-â”‚   â””â”€â”€ GET    /orders/{id}                     â†’ Get order details
-â”‚
-â”œâ”€â”€ ðŸ“‹ Inventory via Gateway (/inventory)
-â”‚   â”œâ”€â”€ GET    /inventory                       â†’ Check stock levels
-â”‚   â”œâ”€â”€ POST   /inventory                       â†’ Update inventory
-â”‚   â”œâ”€â”€ PUT    /inventory/bulk                  â†’ Bulk inventory update
-â”‚   â””â”€â”€ GET    /inventory/low-stock             â†’ Get low stock items
-â”‚
-â”œâ”€â”€ ðŸŽ¯ Gateway Health & Monitoring
-â”‚   â”œâ”€â”€ GET    /actuator/health                 â†’ Gateway health check
-â”‚   â”œâ”€â”€ GET    /actuator/gateway/routes         â†’ View all routes
-â”‚   â”œâ”€â”€ GET    /health/product                  â†’ Product service health
-â”‚   â”œâ”€â”€ GET    /health/order                    â†’ Order service health
-â”‚   â”œâ”€â”€ GET    /health/inventory                â†’ Inventory service health
-â”‚   â””â”€â”€ GET    /health/notification             â†’ Notification service health
-â”‚
-â”œâ”€â”€ ðŸ” Service Discovery & Monitoring
-â”‚   â”œâ”€â”€ GET    /eureka                          â†’ Eureka Dashboard (Port 8761)
-â”‚   â”œâ”€â”€ GET    /eureka/apps                     â†’ Registered applications (JSON)
-â”‚   â”œâ”€â”€ GET    /eureka/apps/{app-name}          â†’ Specific application info
-â”‚   â””â”€â”€ GET    /actuator/health                 â†’ Discovery service health
-â”‚
-â””â”€â”€ ðŸ›¡ï¸ Fallback & Error Handling
-    â”œâ”€â”€ GET    /fallback                        â†’ General fallback response
-    â”œâ”€â”€ GET    /fallback/product                â†’ Product service fallback
-    â”œâ”€â”€ GET    /fallback/order                  â†’ Order service fallback
-    â””â”€â”€ GET    /fallback/inventory               â†’ Inventory service fallback
-```
-
-### ðŸ”„ **Integration Test Workflow (Via Gateway)**
-```
-1ï¸âƒ£ Discovery Service Check     â†’ Verify Eureka is running (Port 8761)
-2ï¸âƒ£ Gateway Health Check       â†’ Verify gateway is running (Port 9090)
-3ï¸âƒ£ Service Registration       â†’ Check all services are registered in Eureka
-4ï¸âƒ£ Setup Test Inventory       â†’ Add initial stock via /inventory
-5ï¸âƒ£ Browse Product Catalog     â†’ View products via /products  
-6ï¸âƒ£ Check Stock Levels        â†’ Verify inventory via /inventory
-7ï¸âƒ£ Create Order              â†’ Place order via /orders (auto-validation)
-8ï¸âƒ£ Verify Updated Stock      â†’ Confirm stock reduction via /inventory
-9ï¸âƒ£ Retrieve Customer Orders  â†’ Get order history via /orders
-ðŸ”Ÿ Update Order Status       â†’ Mark as completed via /orders
-1ï¸âƒ£1ï¸âƒ£ Monitor Low Stock         â†’ Check restock needs via /inventory
-1ï¸âƒ£2ï¸âƒ£ Test Rate Limiting        â†’ Exceed rate limits to test throttling
-1ï¸âƒ£3ï¸âƒ£ Test Circuit Breaker    â†’ Simulate service failures
-1ï¸âƒ£4ï¸âƒ£ Test Fallback Scenarios â†’ Verify resilience patterns
-1ï¸âƒ£5ï¸âƒ£ Test Service Discovery  â†’ Stop/start services and verify auto-discovery
+🔍 Gateway API Routes (Port 9090)
+├── 🛒 Products via Gateway (/products)
+│   ├── GET    /products                        → List all products
+│   ├── POST   /products                        → Create new product
+│   ├── GET    /products/{id}                   → Get product by ID
+│   ├── PUT    /products/{id}                   → Update product
+│   └── DELETE /products/{id}                   → Delete product
+│
+├── 📦 Orders via Gateway (/orders)
+│   ├── GET    /orders/customer/{name}          → Get customer orders
+│   ├── POST   /orders                          → Create new order
+│   ├── PUT    /orders/{id}/status              → Update order status
+│   └── GET    /orders/{id}                     → Get order details
+│
+├── 📋 Inventory via Gateway (/inventory)
+│   ├── GET    /inventory                       → Check stock levels
+│   ├── POST   /inventory                       → Update inventory
+│   ├── PUT    /inventory/bulk                  → Bulk inventory update
+│   └── GET    /inventory/low-stock             → Get low stock items
+│
+├── 🎯 Gateway Health & Monitoring
+│   ├── GET    /actuator/health                 → Gateway health check
+│   ├── GET    /actuator/gateway/routes         → View all routes
+│   ├── GET    /health/product                  → Product service health
+│   ├── GET    /health/order                    → Order service health
+│   ├── GET    /health/inventory                → Inventory service health
+│   └── GET    /health/notification             → Notification service health
+│
+├── 🔍 Service Discovery & Monitoring
+│   ├── GET    /eureka                          → Eureka Dashboard (Port 8761)
+│   ├── GET    /eureka/apps                     → Registered applications (JSON)
+│   ├── GET    /eureka/apps/{app-name}          → Specific application info
+│   └── GET    /actuator/health                 → Discovery service health
+│
+└── 🛡️ Fallback & Error Handling
+    ├── GET    /fallback                        → General fallback response
+    ├── GET    /fallback/product                → Product service fallback
+    ├── GET    /fallback/order                  → Order service fallback
+    └── GET    /fallback/inventory              → Inventory service fallback
 ```
 
-### ðŸ§ª **Test Categories**
-- **ðŸŽ¯ Gateway Service APIs** - Routing, health checks, fallback testing
-- **ï¿½ï¸ Rate Limiting** - Test API throttling and custom rate limit responses
-- **ðŸ”„ Circuit Breaker** - Test fault tolerance and fallback mechanisms
-- **ï¿½ðŸ›ï¸ Product Service APIs** - CRUD operations via gateway
-- **ðŸ“¦ Order Service APIs** - Order processing via gateway  
-- **ðŸ“‹ Inventory Service APIs** - Stock management via gateway
-- **ðŸ”„ Integration Scenarios** - End-to-end workflow via gateway
-- **âŒ Error Testing** - Gateway error handling and circuit breaker
-- **ðŸš€ Performance Testing** - Gateway performance and load balancing
+### 📄 **Integration Test Workflow (Via Gateway)**
+```
+1️⃣ Discovery Service Check     → Verify Eureka is running (Port 8761)
+2️⃣ Gateway Health Check       → Verify gateway is running (Port 9090)
+3️⃣ Service Registration       → Check all services are registered in Eureka
+4️⃣ Setup Test Inventory       → Add initial stock via /inventory
+5️⃣ Browse Product Catalog     → View products via /products  
+6️⃣ Check Stock Levels        → Verify inventory via /inventory
+7️⃣ Create Order              → Place order via /orders (auto-validation)
+8️⃣ Verify Updated Stock      → Confirm stock reduction via /inventory
+9️⃣ Retrieve Customer Orders  → Get order history via /orders
+🔟 Update Order Status       → Mark as completed via /orders
+1️⃣1️⃣ Monitor Low Stock         → Check restock needs via /inventory
+1️⃣2️⃣ Test Rate Limiting        → Exceed rate limits to test throttling
+1️⃣3️⃣ Test Circuit Breaker    → Simulate service failures
+1️⃣4️⃣ Test Fallback Scenarios → Verify resilience patterns
+1️⃣5️⃣ Test Service Discovery  → Stop/start services and verify auto-discovery
+```
 
-## ðŸ”„ Key Integration Features
+### 🧪 **Test Categories**
+- **🔍 Service Discovery** - Test service registration, health checks, and automatic discovery
+- **🎯 Gateway Service APIs** - Routing, health checks, fallback testing
+- **⚡ Rate Limiting** - Test API throttling and custom rate limit responses
+- **🔄 Circuit Breaker** - Test fault tolerance and fallback mechanisms
+- **🛒 Product Service APIs** - CRUD operations via gateway
+- **📦 Order Service APIs** - Order processing via gateway  
+- **📋 Inventory Service APIs** - Stock management via gateway
+- **📄 Integration Scenarios** - End-to-end workflow via gateway
+- **❌ Error Testing** - Gateway error handling and circuit breaker
+- **🚀 Performance Testing** - Gateway performance and load balancing
 
-### **ðŸ›¡ï¸ Rate Limiting with Custom Responses**
+## 📄 Key Integration Features
+
+### **🛡️ Rate Limiting with Custom Responses**
 ```java
 // Custom Rate Limiter provides detailed error responses:
 {
@@ -578,7 +546,7 @@ mvn clean spring-boot:run
 }
 ```
 
-### **ðŸ”„ Circuit Breaker with Fallback**
+### **🔄 Circuit Breaker with Fallback**
 ```java
 // Resilience4j Configuration:
 - Failure Rate Threshold: 50%
@@ -633,7 +601,7 @@ public interface InventoryClient {
 // Multiple instances of same service are automatically discovered and balanced
 ```
 
-## ðŸ“Š Sample Data
+## 📊 Sample Data
 
 ### **Products**
 - **iPhone 14 Pro** - `IPHONE14PRO-256-BLACK` - $999.99
@@ -649,18 +617,18 @@ public interface InventoryClient {
 - Dell XPS 15: **18 units**
 - PlayStation 5: **8 units** (Low stock)
 
-## ðŸŽ¯ Business Scenarios
+## 🎯 Business Scenarios
 
 ### **E-commerce Workflow**
-1. **Service Discovery** â†’ All services register with Eureka on startup
-2. **Customer browses products** â†’ Product Service (via Gateway)
-3. **Customer checks availability** â†’ Inventory Service (via Gateway)
-4. **Customer places order** â†’ Order Service (via Gateway)
+1. **Service Discovery** → All services register with Eureka on startup
+2. **Customer browses products** → Product Service (via Gateway)
+3. **Customer checks availability** → Inventory Service (via Gateway)
+4. **Customer places order** → Order Service (via Gateway)
    - Validates stock via Feign Client (using service discovery)
    - Reduces inventory automatically
    - Publishes notification event
-5. **Order confirmation sent** â†’ Notification Service
-6. **Inventory updated in real-time** â†’ All services synchronized via service discovery
+5. **Order confirmation sent** → Notification Service
+6. **Inventory updated in real-time** → All services synchronized via service discovery
 
 ### **Inventory Management**
 - **Automatic stock validation** during order creation
@@ -668,7 +636,7 @@ public interface InventoryClient {
 - **Low stock monitoring** with configurable thresholds
 - **Soft delete** support for data integrity
 
-## ðŸ”§ Advanced Features
+## 🔧 Advanced Features
 
 ### **Caching Strategy**
 ```java
@@ -691,7 +659,7 @@ public interface InventoryClient {
 - **Bulk Operations** - Reduced database round trips
 - **Async Processing** - Non-blocking operations where possible
 
-## ðŸ› Troubleshooting
+## 🛠 Troubleshooting
 
 ### **Common Issues**
 
@@ -734,7 +702,7 @@ curl http://localhost:8761/eureka/apps/PRODUCT-SERVICE
 eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
 
 # Check Eureka server logs for registration issues
-# Restart services in correct order: Discovery â†’ Gateway â†’ Other Services
+# Restart services in correct order: Discovery → Gateway → Other Services
 ```
 
 **Gateway Routing Issues**
@@ -822,7 +790,7 @@ kafka-topics.sh --describe --topic shadangi54-notification-topic \
   --bootstrap-server localhost:9092
 ```
 
-## ðŸ“ˆ Performance Metrics
+## 📈 Performance Metrics
 
 ### **Response Times** (Average with Gateway and Service Discovery)
 - Service discovery overhead: **< 5ms**
@@ -850,7 +818,7 @@ kafka-topics.sh --describe --topic shadangi54-notification-topic \
 - Service registration time: **< 10 seconds** (new instance)
 - Service deregistration time: **< 90 seconds** (failed instance removal)
 
-## ðŸ¤ Contributing
+## 🤝 Contributing
 
 1. **Fork** the repository
 2. Create a **feature branch** (`git checkout -b feature/AmazingFeature`)
@@ -858,17 +826,17 @@ kafka-topics.sh --describe --topic shadangi54-notification-topic \
 4. **Push** to the branch (`git push origin feature/AmazingFeature`)
 5. Open a **Pull Request**
 
-## ðŸ“„ License
+## 📄 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-## ðŸ‘¨â€ðŸ’» Author
+## 👨‍💻 Author
 
 **Shadangi54**
 - GitHub: [@shadangi54](https://github.com/shadangi54)
 - Email: [shadangi54@gmail.com](mailto:shadangi54@gmail.com)
 
-## ðŸ™ Acknowledgments
+## 🙏 Acknowledgments
 
 - **Spring Boot Team** - For the excellent framework
 - **Spring Cloud Gateway** - For powerful routing and filtering capabilities
@@ -882,5 +850,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ---
 
-â­ **Star this repository if you found it helpful!** â­
-
+⭐ **Star this repository if you found it helpful!** ⭐
