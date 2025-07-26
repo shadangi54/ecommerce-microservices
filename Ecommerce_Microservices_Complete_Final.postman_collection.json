@@ -1,8 +1,8 @@
 {
   "info": {
     "_postman_id": "ecommerce-microservices-complete-final-2025",
-    "name": "🛒 Ecommerce Microservices - Complete Final Collection",
-    "description": "Comprehensive API collection for testing all microservices via Gateway with Circuit Breaker and Rate Limiting. This collection includes all endpoints discovered from controllers and supports both routing methods.\n\n🏗️ **Architecture:**\n- Gateway Service: Port 9090 (Central API Gateway with Circuit Breaker & Rate Limiting)\n- Product Service: Port 8080 (Direct access)\n- Order Service: Port 8081 (Direct access)\n- Inventory Service: Port 8082 (Direct access)\n- Notification Service: Port 8083 (Direct access)\n\n🔄 **Access Methods:**\n1. **Via Gateway (Recommended)** - Use {{gatewayUrl}} for production-like routing with protection\n2. **Direct Service Access** - Use individual service URLs for development/debugging\n\n⚡ **New Features:**\n- Circuit Breaker Protection\n- Rate Limiting (10 requests/second for products, 5 for orders, 15 for inventory)\n- Enhanced Error Handling\n- Rate Limit Testing Scenarios\n\n📋 **Test Categories:**\n- Gateway Service Health & Fallback APIs\n- Product Service CRUD Operations (via Gateway & Direct)\n- Order Service Management (via Gateway & Direct)\n- Inventory Service Stock Management (via Gateway & Direct)\n- Rate Limiting Tests\n- Circuit Breaker Tests\n- End-to-End Integration Testing\n- Error Handling & Resilience Testing",
+    "name": "🛒 Ecommerce Microservices - Complete Final Collection (Security Disabled)",
+    "description": "API collection for microservices with security disabled.\n\n🏗️ **Architecture Overview:**\n- Gateway Service (9090): Central routing with Circuit Breaker & Rate Limiting\n- Discovery Service (8761): Service registration and discovery\n- Product Service (8080): Product catalog management\n- Order Service (8081): Order processing\n- Inventory Service (8082): Stock management\n- Notification Service (8083): Event processing\n\n⚡ **Features:**\n- Circuit Breaker Protection\n- Redis Rate Limiting\n- Service Discovery\n- Kafka Event Processing\n- Redis Caching\n\n🔒 **Security Note:**\n- Security is currently disabled\n- Auth Service endpoints are commented out\n- No JWT token required for requests\n\n🏗️ **Architecture:**\n- Gateway Service: Port 9090 (Central API Gateway with Circuit Breaker \u0026 Rate Limiting)\n- Auth Service: Port 8084 (JWT authentication and user management)\n- Product Service: Port 8080 (Product catalog management)\n- Order Service: Port 8081 (Order processing and management)\n- Inventory Service: Port 8082 (Stock management)\n- Notification Service: Port 8083 (Event-based notifications via Kafka)\n- Discovery Service: Port 8761 (Eureka server for service discovery)\n\n🔄 **Access Methods:**\n1. **Via Gateway (Recommended)** - Use {{gatewayUrl}} for production-like routing with protection\n2. **Direct Service Access** - Use individual service URLs for development/debugging\n\n⚡ **Infrastructure Components:**\n- Circuit Breaker Protection (Resilience4j)\n- Rate Limiting (Redis-based, 10 requests/second for products, 5 for orders, 15 for inventory)\n- Service Discovery (Eureka)\n- Message Streaming (Apache Kafka)\n- Caching (Redis)\n- In-memory Database (H2)\n\n📋 **Test Categories:**\n- Authentication and Authorization\n- Gateway Service Health \u0026 Fallback APIs\n- Product Service CRUD Operations\n- Order Service Management\n- Inventory Service Stock Management\n- Notification Service Event Processing\n- User Service Profile Management\n- Rate Limiting Tests\n- Circuit Breaker Tests\n- End-to-End Integration Testing\n- Error Handling \u0026 Resilience Testing\n- Infrastructure Component Testing",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "ecommerce-complete-final",
     "version": {
@@ -13,8 +13,8 @@
   },
   "item": [
     {
-      "name": "🔒 Authentication Service APIs",
-      "description": "User authentication and authorization endpoints for secure access to microservices",
+      "name": "🔒 Auth Endpoints (Disabled)",
+      "description": "Authentication endpoints - Currently disabled as security is turned off",
       "item": [
         {
           "name": "Direct Auth Test (Debug)",
@@ -28,8 +28,8 @@
                   "    console.log(\"Error: pm.response is undefined\");",
                   "    return;",
                   "}",
-                  "console.log(\"Response Status: \" + (pm.response.code || 'No status code'));",
-                  "console.log(\"Response Body: \" + (pm.response.text() || 'No response text'));",
+                  "console.log(\"Response Status: \" + (pm.response.code || \u0027No status code\u0027));",
+                  "console.log(\"Response Body: \" + (pm.response.text() || \u0027No response text\u0027));",
                   "try {",
                   "    var jsonData = pm.response.json();",
                   "    console.log(\"Response as JSON: \" + JSON.stringify(jsonData, null, 2));",
@@ -62,10 +62,8 @@
               "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"test1234\"\n}"
             },
             "url": {
-              "raw": "http://localhost:8084/auth/signin",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8084",
+              "raw": "{{gatewayUrl}}/auth/signin",
+              "host": ["{{gatewayUrl}}"],
               "path": ["auth", "signin"]
             },
             "description": "Debug request to directly test authentication service response"
@@ -95,16 +93,16 @@
                   "    console.log(\"Response Body: \" + responseText);",
                   "    ",
                   "    // Only try to parse if we have content",
-                  "    if (responseText && responseText.trim()) {",
+                  "    if (responseText \u0026\u0026 responseText.trim()) {",
                   "        try {",
                   "            var jsonData = JSON.parse(responseText);",
                   "            console.log(\"Response parsed as JSON successfully\");",
                   "            ",
                   "            // Safely check for object type and log fields",
-                  "            if (jsonData && typeof jsonData === 'object') {",
-                  "                console.log(\"Available fields: \" + Object.keys(jsonData).join(', '));",
+                  "            if (jsonData \u0026\u0026 typeof jsonData === \u0027object\u0027) {",
+                  "                console.log(\"Available fields: \" + Object.keys(jsonData).join(\u0027, \u0027));",
                   "                ",
-                  "                // Log specific fields we're interested in",
+                  "                // Log specific fields we\u0027re interested in",
                   "                console.log(\"Has token field: \" + (jsonData.token !== undefined));",
                   "                console.log(\"Has accessToken field: \" + (jsonData.accessToken !== undefined));",
                   "            } else {",
@@ -128,10 +126,8 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8084/auth/test-response",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8084",
+              "raw": "{{gatewayUrl}}/auth/test-response",
+              "host": ["{{gatewayUrl}}"],
               "path": ["auth", "test-response"]
             },
             "description": "Debug request to test response structure from auth service"
@@ -139,7 +135,7 @@
           "response": []
         },
         {
-          "name": "User Registration (Signup)",
+          "name": "User Registration (Register)",
           "request": {
             "method": "POST",
             "header": [
@@ -153,9 +149,9 @@
               "raw": "{\n  \"username\": \"john_doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"test1234\",\n  \"roles\": [\"user\"]\n}"
             },
             "url": {
-              "raw": "{{gatewayUrl}}/auth/signup",
+              "raw": "{{gatewayUrl}}/auth/register",
               "host": ["{{gatewayUrl}}"],
-              "path": ["auth", "signup"]
+              "path": ["auth", "register"]
             },
             "description": "Register a new user with basic user role"
           },
@@ -171,13 +167,13 @@
                   "// Simple and direct approach to extract token",
                   "try {",
                   "    // Log basic response info",
-                  "    console.log('Response status: ' + (pm.response ? pm.response.code : 'No response code'));",
+                  "    console.log(\u0027Response status: \u0027 + (pm.response ? pm.response.code : \u0027No response code\u0027));",
                   "",
                   "    // Only proceed if we have a valid response",
-                  "    if (pm.response && pm.response.code === 200) {",
+                  "    if (pm.response \u0026\u0026 pm.response.code === 200) {",
                   "        // Get response as text first to log it",
                   "        var responseText = pm.response.text();",
-                  "        console.log('Response received: ' + responseText);",
+                  "        console.log(\u0027Response received: \u0027 + responseText);",
                   "        ",
                   "        // Try to parse as JSON",
                   "        try {",
@@ -186,26 +182,26 @@
                   "            // Direct token extraction - no complex logic",
                   "            if (jsonData) {",
                   "                if (jsonData.token) {",
-                  "                    pm.environment.set('auth_token', jsonData.token);",
-                  "                    console.log('Token saved from token field');",
+                  "                    pm.environment.set(\u0027auth_token\u0027, jsonData.token);",
+                  "                    console.log(\u0027Token saved from token field\u0027);",
                   "                } else if (jsonData.accessToken) {",
-                  "                    pm.environment.set('auth_token', jsonData.accessToken);",
-                  "                    console.log('Token saved from accessToken field');",
+                  "                    pm.environment.set(\u0027auth_token\u0027, jsonData.accessToken);",
+                  "                    console.log(\u0027Token saved from accessToken field\u0027);",
                   "                } else {",
-                  "                    console.log('No token found in expected fields');",
-                  "                    console.log('Available fields: ' + Object.keys(jsonData).join(', '));",
+                  "                    console.log(\u0027No token found in expected fields\u0027);",
+                  "                    console.log(\u0027Available fields: \u0027 + Object.keys(jsonData).join(\u0027, \u0027));",
                   "                }",
                   "            } else {",
-                  "                console.log('Response parsed as JSON but is null or undefined');",
+                  "                console.log(\u0027Response parsed as JSON but is null or undefined\u0027);",
                   "            }",
                   "        } catch (e) {",
-                  "            console.log('Error parsing JSON: ' + e.message);",
+                  "            console.log(\u0027Error parsing JSON: \u0027 + e.message);",
                   "        }",
                   "    } else {",
-                  "        console.log('No valid response or non-200 status code');",
+                  "        console.log(\u0027No valid response or non-200 status code\u0027);",
                   "    }",
                   "} catch (error) {",
-                  "    console.log('Script error: ' + error.message);",
+                  "    console.log(\u0027Script error: \u0027 + error.message);",
                   "}"
                 ],
                 "type": "text/javascript"
@@ -248,10 +244,10 @@
                   "    if (pm.response.code === 200) {",
                   "        try {",
                   "            var jsonData = pm.response.json();",
-                  "            if (jsonData && jsonData.token) {",
+                  "            if (jsonData \u0026\u0026 jsonData.token) {",
                   "                pm.environment.set(\"admin_token\", jsonData.token);",
                   "                console.log(\"Admin token saved: \" + jsonData.token);",
-                  "            } else if (jsonData && jsonData.accessToken) {",
+                  "            } else if (jsonData \u0026\u0026 jsonData.accessToken) {",
                   "                pm.environment.set(\"admin_token\", jsonData.accessToken);",
                   "                console.log(\"Admin token saved from accessToken: \" + jsonData.accessToken);",
                   "            } else {",
@@ -259,16 +255,16 @@
                   "            }",
                   "        } catch (jsonError) {",
                   "            console.log(\"Error parsing JSON: \" + jsonError.message);",
-                  "            console.log(\"Response text: \" + (pm.response.text() || 'No response text'));",
+                  "            console.log(\"Response text: \" + (pm.response.text() || \u0027No response text\u0027));",
                   "        }",
                   "    } else {",
                   "        console.log(\"Non-200 response received: \" + pm.response.code);",
-                  "        console.log(\"Response body: \" + (pm.response.text() || 'No response text'));",
+                  "        console.log(\"Response body: \" + (pm.response.text() || \u0027No response text\u0027));",
                   "    }",
                   "} catch (error) {",
                   "    console.log(\"Error in test script: \" + error.message);",
                   "    if (pm.response) {",
-                  "        console.log(\"Response body: \" + (pm.response.text() || 'No response text'));",
+                  "        console.log(\"Response body: \" + (pm.response.text() || \u0027No response text\u0027));",
                   "    } else {",
                   "        console.log(\"pm.response is undefined\");",
                   "    }",
@@ -314,9 +310,9 @@
               "raw": "{\n  \"username\": \"moderator_user\",\n  \"email\": \"moderator@example.com\",\n  \"password\": \"mod1234\",\n  \"roles\": [\"mod\"]\n}"
             },
             "url": {
-              "raw": "{{gatewayUrl}}/auth/signup",
+              "raw": "{{gatewayUrl}}/auth/register",
               "host": ["{{gatewayUrl}}"],
-              "path": ["auth", "signup"]
+              "path": ["auth", "register"]
             },
             "description": "Register a new moderator user"
           },
@@ -527,8 +523,8 @@
       ]
     },
     {
-      "name": "🔐 Security Testing Scenarios",
-      "description": "Test JWT authentication, authorization, and security features",
+      "name": "[DISABLED] Security Testing Scenarios",
+      "description": "Security testing is currently disabled",
       "item": [
         {
           "name": "Access Protected Endpoint Without Token",
@@ -619,10 +615,10 @@
                   "    if (pm.response.code === 200) {",
                   "        try {",
                   "            var jsonData = pm.response.json();",
-                  "            if (jsonData && jsonData.token) {",
+                  "            if (jsonData \u0026\u0026 jsonData.token) {",
                   "                pm.environment.set(\"refreshed_token\", jsonData.token);",
                   "                console.log(\"Token refreshed and saved\");",
-                  "            } else if (jsonData && jsonData.accessToken) {",
+                  "            } else if (jsonData \u0026\u0026 jsonData.accessToken) {",
                   "                pm.environment.set(\"refreshed_token\", jsonData.accessToken);",
                   "                console.log(\"Token refreshed and saved from accessToken\");",
                   "            } else {",
@@ -630,16 +626,16 @@
                   "            }",
                   "        } catch (jsonError) {",
                   "            console.log(\"Error parsing JSON: \" + jsonError.message);",
-                  "            console.log(\"Response text: \" + (pm.response.text() || 'No response text'));",
+                  "            console.log(\"Response text: \" + (pm.response.text() || \u0027No response text\u0027));",
                   "        }",
                   "    } else {",
                   "        console.log(\"Non-200 response received: \" + pm.response.code);",
-                  "        console.log(\"Response body: \" + (pm.response.text() || 'No response text'));",
+                  "        console.log(\"Response body: \" + (pm.response.text() || \u0027No response text\u0027));",
                   "    }",
                   "} catch (error) {",
                   "    console.log(\"Error in test script: \" + error.message);",
                   "    if (pm.response) {",
-                  "        console.log(\"Response body: \" + (pm.response.text() || 'No response text'));",
+                  "        console.log(\"Response body: \" + (pm.response.text() || \u0027No response text\u0027));",
                   "    } else {",
                   "        console.log(\"pm.response is undefined\");",
                   "    }",
@@ -906,7 +902,7 @@
       ]
     },
     {
-      "name": "🔄 Resilience & Load Testing",
+      "name": "🔄 Resilience \u0026 Load Testing",
       "description": "Comprehensive resilience and load testing scenarios",
       "item": [
         {
@@ -1054,7 +1050,290 @@
       ]
     },
     {
-      "name": "🛍️ Product Service APIs - Via Gateway",
+      "name": "� User Service APIs",
+      "description": "User profile management endpoints",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/users/profile",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["users", "profile"]
+            },
+            "description": "Get the current user's profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"updated_email@example.com\",\n  \"phone\": \"555-123-4567\",\n  \"address\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Anytown\",\n    \"state\": \"CA\",\n    \"zipCode\": \"12345\",\n    \"country\": \"USA\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/users/profile",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["users", "profile"]
+            },
+            "description": "Update the current user's profile"
+          },
+          "response": []
+        },
+        {
+          "name": "List All Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/users",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["users"]
+            },
+            "description": "List all users (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/users/1",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["users", "1"]
+            },
+            "description": "Get a specific user by ID (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/users/1",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["users", "1"]
+            },
+            "description": "Delete a user (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "User Service Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/users/actuator/health",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["users", "actuator", "health"]
+            },
+            "description": "Check if User Service is running and healthy"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔄 End-to-End Workflow Tests",
+      "description": "Complete end-to-end testing scenarios",
+      "item": [
+        {
+          "name": "Complete Purchase Flow",
+          "description": "A complete purchase flow from login to order confirmation",
+          "item": [
+            {
+              "name": "1. User Login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData && jsonData.token) {",
+                      "    pm.environment.set('auth_token', jsonData.token);",
+                      "    console.log('Token saved to environment');",
+                      "} else {",
+                      "    console.log('No token found in response');",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"test1234\"\n}"
+                },
+                "url": {
+                  "raw": "{{gatewayUrl}}/auth/signin",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["auth", "signin"]
+                }
+              }
+            },
+            {
+              "name": "2. Browse Products",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/products",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["products"]
+                }
+              }
+            },
+            {
+              "name": "3. Check Product Stock",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/inventory/products/1",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["inventory", "products", "1"]
+                }
+              }
+            },
+            {
+              "name": "4. Create Order",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData && jsonData.id) {",
+                      "    pm.environment.set('order_id', jsonData.id);",
+                      "    console.log('Order ID saved to environment');",
+                      "} else {",
+                      "    console.log('No order ID found in response');",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 1,\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"quantity\": 2\n    },\n    {\n      \"productId\": 2,\n      \"quantity\": 1\n    }\n  ],\n  \"shippingAddress\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Anytown\",\n    \"state\": \"CA\",\n    \"zipCode\": \"12345\",\n    \"country\": \"USA\"\n  },\n  \"paymentMethod\": \"CREDIT_CARD\"\n}"
+                },
+                "url": {
+                  "raw": "{{gatewayUrl}}/orders",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["orders"]
+                }
+              }
+            },
+            {
+              "name": "5. Check Order Status",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/orders/{{order_id}}",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["orders", "{{order_id}}"]
+                }
+              }
+            },
+            {
+              "name": "6. Check Notifications",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/notifications/user/1",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["notifications", "user", "1"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "�🛍️ Product Service APIs - Via Gateway",
       "description": "Product management endpoints accessed through Gateway Service",
       "item": [
         {
@@ -1168,7 +1447,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{gatewayUrl}}/products/search?name=iPhone&category=Electronics&minPrice=500&maxPrice=2000&isActive=true",
+              "raw": "{{gatewayUrl}}/products/search?name=iPhone\u0026category=Electronics\u0026minPrice=500\u0026maxPrice=2000\u0026isActive=true",
               "host": ["{{gatewayUrl}}"],
               "path": ["products", "search"],
               "query": [
@@ -1265,6 +1544,36 @@
         },
         {
           "name": "Create New Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "    if (pm.response.code === 202) {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData \u0026\u0026 jsonData.orderNumber) {",
+                  "            pm.environment.set(\"async_order_number\", jsonData.orderNumber);",
+                  "            console.log(\"Async Order Number saved: \" + jsonData.orderNumber);",
+                  "            ",
+                  "            // Add a small delay to give time for the order processing to start",
+                  "            setTimeout(function() {",
+                  "                console.log(\"Continuing after delay\");",
+                  "            }, 1000);",
+                  "        } else {",
+                  "            console.log(\"Order number not found in response\");",
+                  "        }",
+                  "    } else {",
+                  "        console.log(\"Unexpected response code: \" + pm.response.code);",
+                  "    }",
+                  "} catch(e) {",
+                  "    console.log(\"Error in test script: \" + e.message);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -1275,14 +1584,62 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"customerName\": \"{{customerName}}\",\n  \"status\": \"PENDING\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 1099.99\n    },\n    {\n      \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n      \"quantity\": 1,\n      \"price\": 399.99\n    }\n  ]\n}"
+              "raw": "{\n  \"customerName\": \"{{customerName}}\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 1099.99\n    },\n    {\n      \"skuCode\": \"APPLE-WATCH8-45MM-GPS\",\n      \"quantity\": 1,\n      \"price\": 399.99\n    }\n  ]\n}"
             },
             "url": {
               "raw": "{{gatewayUrl}}/orders",
               "host": ["{{gatewayUrl}}"],
               "path": ["orders"]
             },
-            "description": "Create new order with automatic inventory validation via gateway"
+            "description": "Create new order with automatic inventory validation via gateway - now processes asynchronously and returns 202 Accepted status with a pending order reference"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Async Order Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "    // Log the response status",
+                  "    console.log(\"Response Status: \" + pm.response.code);",
+                  "    ",
+                  "    // Check if we have a successful response",
+                  "    if (pm.response.code === 200) {",
+                  "        var jsonData = pm.response.json();",
+                  "        console.log(\"Order Status: \" + jsonData.status);",
+                  "        ",
+                  "        // Test assertions",
+                  "        pm.test(\"Order should be processed\", function() {",
+                  "            pm.expect(jsonData.status).to.be.oneOf([\"COMPLETED\", \"PROCESSING\", \"PENDING\", \"FAILED\"]);",
+                  "        });",
+                  "        ",
+                  "        // Set status in environment for later tests",
+                  "        if (jsonData.status) {",
+                  "            pm.environment.set(\"async_order_status\", jsonData.status);",
+                  "        }",
+                  "    } else if (pm.response.code === 404) {",
+                  "        console.log(\"Order not found yet - still processing\");",
+                  "    }",
+                  "} catch(e) {",
+                  "    console.log(\"Error in test script: \" + e.message);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/{{async_order_number}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "{{async_order_number}}"]
+            },
+            "description": "Check the status of an asynchronously created order"
           },
           "response": []
         },
@@ -1490,7 +1847,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{productServiceUrl}}/products/search?name=Test&isActive=true",
+              "raw": "{{productServiceUrl}}/products/search?name=Test\u0026isActive=true",
               "host": ["{{productServiceUrl}}"],
               "path": ["products", "search"],
               "query": [
@@ -1645,20 +2002,168 @@
       ]
     },
     {
-      "name": "🔔 Notification Service APIs - Direct",
-      "description": "Notification service endpoints with direct access",
+      "name": "⏱️ Async Order Flow Testing",
+      "description": "Test the asynchronous order creation workflow",
       "item": [
         {
-          "name": "Notification Service Health (Direct)",
+          "name": "1. Create Async Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "    // Check if we have a 202 Accepted response",
+                  "    pm.test(\"Response status is 202 Accepted\", function() {",
+                  "        pm.response.to.have.status(202);",
+                  "    });",
+                  "    ",
+                  "    // Save order number for subsequent requests",
+                  "    if (pm.response.code === 202) {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData \u0026\u0026 jsonData.orderNumber) {",
+                  "            pm.environment.set(\"async_order_number\", jsonData.orderNumber);",
+                  "            console.log(\"Async Order Number saved: \" + jsonData.orderNumber);",
+                  "            ",
+                  "            // Save pending status",
+                  "            pm.environment.set(\"async_order_status\", jsonData.status || \"PENDING\");",
+                  "        } else {",
+                  "            console.log(\"Order number not found in response\");",
+                  "        }",
+                  "    }",
+                  "} catch(e) {",
+                  "    console.log(\"Error in test script: \" + e.message);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "JWT authentication token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Async Test Customer\",\n  \"products\": [\n    {\n      \"skuCode\": \"IPHONE14PRO-256-BLACK\",\n      \"quantity\": 1,\n      \"price\": 1099.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/orders",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create a new order asynchronously"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Check Order Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "    // Allow both 200 (order found) and 404 (still processing)",
+                  "    pm.test(\"Response should be 200 or 404\", function() {",
+                  "        pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+                  "    });",
+                  "    ",
+                  "    // If order is found, save its status",
+                  "    if (pm.response.code === 200) {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.environment.set(\"async_order_status\", jsonData.status || \"UNKNOWN\");",
+                  "        console.log(\"Order status: \" + jsonData.status);",
+                  "        ",
+                  "        // Test order status",
+                  "        pm.test(\"Order should have a valid status\", function() {",
+                  "            pm.expect(jsonData.status).to.be.oneOf([",
+                  "                \"PENDING\", \"PROCESSING\", \"COMPLETED\", \"FAILED\"",
+                  "            ]);",
+                  "        });",
+                  "    } else {",
+                  "        console.log(\"Order not yet available - still processing asynchronously\");",
+                  "    }",
+                  "} catch(e) {",
+                  "    console.log(\"Error in test script: \" + e.message);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "JWT authentication token"
+              }
+            ],
             "url": {
-              "raw": "{{notificationServiceUrl}}/actuator/health",
-              "host": ["{{notificationServiceUrl}}"],
-              "path": ["actuator", "health"]
+              "raw": "{{gatewayUrl}}/orders/{{async_order_number}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "{{async_order_number}}"]
             },
-            "description": "Check notification service health directly"
+            "description": "Check the status of the asynchronously created order"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Poll Order Status (Completion)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "    if (pm.response.code === 200) {",
+                  "        var jsonData = pm.response.json();",
+                  "        console.log(\"Order status: \" + jsonData.status);",
+                  "        ",
+                  "        // Update environment variable",
+                  "        pm.environment.set(\"async_order_status\", jsonData.status || \"UNKNOWN\");",
+                  "        ",
+                  "        // Verify order is completed or failed (terminal state)",
+                  "        pm.test(\"Order should be in terminal state\", function() {",
+                  "            pm.expect(jsonData.status).to.be.oneOf([\"COMPLETED\", \"FAILED\"]);",
+                  "        });",
+                  "    } else {",
+                  "        console.log(\"Order not found or other error\");",
+                  "    }",
+                  "} catch(e) {",
+                  "    console.log(\"Error in test script: \" + e.message);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "JWT authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/{{async_order_number}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "{{async_order_number}}"]
+            },
+            "description": "Poll the order status until it reaches a terminal state (COMPLETED or FAILED)"
           },
           "response": []
         }
@@ -1834,7 +2339,7 @@
       ]
     },
     {
-      "name": "❌ Error Handling & Circuit Breaker Tests",
+      "name": "❌ Error Handling \u0026 Circuit Breaker Tests",
       "description": "Test error scenarios and fallback mechanisms",
       "item": [
         {
@@ -1929,6 +2434,738 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "🔐 OAuth2 Security Testing",
+      "description": "Tests for validating Spring OAuth2 implementation for both direct service access and through the gateway",
+      "item": [
+        {
+          "name": "1️⃣ User Management",
+          "description": "User registration and management",
+          "item": [
+            {
+              "name": "Register New User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"testuser2\",\n    \"email\": \"testuser2@example.com\",\n    \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "{{authUrl}}/register",
+                  "host": ["{{authUrl}}"],
+                  "path": ["register"]
+                },
+                "description": "Register a new user account"
+              },
+              "response": []
+            },
+            {
+              "name": "Login User",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData && jsonData.token) {",
+                      "    pm.environment.set(\"auth_token\", jsonData.token);",
+                      "    console.log(\"Token saved to environment\");",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"testuser2\",\n    \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "{{authUrl}}/signin",
+                  "host": ["{{authUrl}}"],
+                  "path": ["signin"]
+                },
+                "description": "Login with username and password to get JWT token"
+              },
+              "response": []
+            },
+            {
+              "name": "Refresh Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"refreshToken\": \"your-refresh-token-here\"\n}"
+                },
+                "url": {
+                  "raw": "{{authUrl}}/refresh",
+                  "host": ["{{authUrl}}"],
+                  "path": ["refresh"]
+                },
+                "description": "Get a new access token using a refresh token"
+              },
+              "response": []
+            },
+            {
+              "name": "Logout User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{authUrl}}/logout",
+                  "host": ["{{authUrl}}"],
+                  "path": ["logout"]
+                },
+                "description": "Logout the current user and invalidate their session"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "2️⃣ Authorization Code Flow",
+          "description": "Authorization Code Flow for web applications",
+          "item": [
+            {
+              "name": "Get OAuth2 Authorization Code",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{authUrl}}/oauth2/authorize?response_type=code\u0026client_id=web-client\u0026scope=openid read write\u0026redirect_uri=http://localhost:8080/login/oauth2/code/web-client-oidc",
+                  "host": ["{{authUrl}}"],
+                  "path": ["oauth2", "authorize"],
+                  "query": [
+                    {
+                      "key": "response_type",
+                      "value": "code"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "web-client"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "openid read write"
+                    },
+                    {
+                      "key": "redirect_uri",
+                      "value": "http://localhost:8080/login/oauth2/code/web-client-oidc"
+                    },
+                    {
+                      "key": "state",
+                      "value": "random_state_123",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Start the authorization code flow. This will redirect to a login page."
+              },
+              "response": []
+            },
+            {
+              "name": "Exchange Code for Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Basic {{base64_client_credentials}}",
+                    "description": "Base64 encoded client_id:client_secret"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "authorization_code",
+                      "type": "text"
+                    },
+                    {
+                      "key": "code",
+                      "value": "PASTE_AUTHORIZATION_CODE_HERE",
+                      "description": "The code received from the previous step",
+                      "type": "text"
+                    },
+                    {
+                      "key": "redirect_uri",
+                      "value": "http://localhost:8080/login/oauth2/code/web-client-oidc",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{authUrl}}/oauth2/token",
+                  "host": ["{{authUrl}}"],
+                  "path": ["oauth2", "token"]
+                },
+                "description": "Exchange the authorization code for an access token"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();",
+                      "if (response.access_token) {",
+                      "    pm.environment.set(\u0027access_token\u0027, response.access_token);",
+                      "    if (response.refresh_token) {",
+                      "        pm.environment.set(\u0027refresh_token\u0027, response.refresh_token);",
+                      "    }",
+                      "    console.log(\u0027Access token saved to environment\u0027);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "3️⃣ Client Credentials Flow",
+          "description": "Client Credentials Flow for service-to-service communication",
+          "item": [
+            {
+              "name": "Get Client Credentials Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Basic {{base64_client_credentials}}",
+                    "description": "Base64 encoded client_id:client_secret"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "client_credentials",
+                      "type": "text"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "read write",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{authUrl}}/oauth2/token",
+                  "host": ["{{authUrl}}"],
+                  "path": ["oauth2", "token"]
+                },
+                "description": "Get an access token using the client credentials flow"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();",
+                      "if (response.access_token) {",
+                      "    pm.environment.set(\u0027client_access_token\u0027, response.access_token);",
+                      "    console.log(\u0027Client access token saved to environment\u0027);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "4️⃣ Token Management",
+          "description": "Token refresh, introspection and revocation",
+          "item": [
+            {
+              "name": "Get User Info",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{authUrl}}/userinfo",
+                  "host": ["{{authUrl}}"],
+                  "path": ["userinfo"]
+                },
+                "description": "Get information about the authenticated user (OIDC)"
+              },
+              "response": []
+            },
+            {
+              "name": "Refresh Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Basic {{base64_client_credentials}}",
+                    "description": "Base64 encoded client_id:client_secret"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "refresh_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "refresh_token",
+                      "value": "{{refresh_token}}",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{authUrl}}/oauth2/token",
+                  "host": ["{{authUrl}}"],
+                  "path": ["oauth2", "token"]
+                },
+                "description": "Refresh an access token using the refresh token"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();",
+                      "if (response.access_token) {",
+                      "    pm.environment.set(\u0027access_token\u0027, response.access_token);",
+                      "    if (response.refresh_token) {",
+                      "        pm.environment.set(\u0027refresh_token\u0027, response.refresh_token);",
+                      "    }",
+                      "    console.log(\u0027Access token refreshed and saved to environment\u0027);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Introspect Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Basic {{base64_client_credentials}}",
+                    "description": "Base64 encoded client_id:client_secret"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "token_type_hint",
+                      "value": "access_token",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{authUrl}}/oauth2/introspect",
+                  "host": ["{{authUrl}}"],
+                  "path": ["oauth2", "introspect"]
+                },
+                "description": "Check if a token is valid and get its details"
+              },
+              "response": []
+            },
+            {
+              "name": "Revoke Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Basic {{base64_client_credentials}}",
+                    "description": "Base64 encoded client_id:client_secret"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "token",
+                      "value": "{{access_token}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "token_type_hint",
+                      "value": "access_token",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{authUrl}}/oauth2/revoke",
+                  "host": ["{{authUrl}}"],
+                  "path": ["oauth2", "revoke"]
+                },
+                "description": "Revoke an access token"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "5️⃣ Direct Service Security Tests",
+          "description": "Test OAuth2 security directly with each service",
+          "item": [
+            {
+              "name": "Auth Service - Public Endpoint",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{authUrl}}/public/test",
+                  "host": ["{{authUrl}}"],
+                  "path": ["public", "test"]
+                },
+                "description": "Access a public endpoint that doesn\u0027t require authentication"
+              },
+              "response": []
+            },
+            {
+              "name": "Auth Service - Protected Endpoint",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{authUrl}}/api/user-info",
+                  "host": ["{{authUrl}}"],
+                  "path": ["api", "user-info"]
+                },
+                "description": "Access a protected endpoint that requires authentication"
+              },
+              "response": []
+            },
+            {
+              "name": "Auth Service - Admin Endpoint",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{authUrl}}/admin/test",
+                  "host": ["{{authUrl}}"],
+                  "path": ["admin", "test"]
+                },
+                "description": "Access an admin-only endpoint"
+              },
+              "response": []
+            },
+            {
+              "name": "Product Service - Direct Access",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productServiceUrl}}/products",
+                  "host": ["{{productServiceUrl}}"],
+                  "path": ["products"]
+                },
+                "description": "Access the product service directly with a token"
+              },
+              "response": []
+            },
+            {
+              "name": "Order Service - Direct Access",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{orderServiceUrl}}/orders",
+                  "host": ["{{orderServiceUrl}}"],
+                  "path": ["orders"]
+                },
+                "description": "Access the order service directly with a token"
+              },
+              "response": []
+            },
+            {
+              "name": "Inventory Service - Direct Access",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{inventoryServiceUrl}}/inventory",
+                  "host": ["{{inventoryServiceUrl}}"],
+                  "path": ["inventory"]
+                },
+                "description": "Access the inventory service directly with a token"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "6️⃣ Gateway Security Tests",
+          "description": "Test OAuth2 security through the gateway",
+          "item": [
+            {
+              "name": "Gateway - Product Service",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/products",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["products"]
+                },
+                "description": "Access the product service through the gateway with an OAuth2 token"
+              },
+              "response": []
+            },
+            {
+              "name": "Gateway - Order Service",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/orders",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["orders"]
+                },
+                "description": "Access the order service through the gateway with an OAuth2 token"
+              },
+              "response": []
+            },
+            {
+              "name": "Gateway - Inventory Service",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/inventory",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["inventory"]
+                },
+                "description": "Access the inventory service through the gateway with an OAuth2 token"
+              },
+              "response": []
+            },
+            {
+              "name": "Gateway - User With Admin Role Test",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/inventory",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["inventory"]
+                },
+                "description": "Test admin-only access through the gateway using a token with admin privileges"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "7️⃣ Security Edge Cases",
+          "description": "Test security edge cases and error scenarios",
+          "item": [
+            {
+              "name": "Invalid Token Test",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer invalid_token_12345",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/products",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["products"]
+                },
+                "description": "Test behavior with an invalid token"
+              },
+              "response": []
+            },
+            {
+              "name": "Expired Token Test",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{expired_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/products",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["products"]
+                },
+                "description": "Test behavior with an expired token"
+              },
+              "response": []
+            },
+            {
+              "name": "Insufficient Scope Test",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{client_access_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{gatewayUrl}}/inventory",
+                  "host": ["{{gatewayUrl}}"],
+                  "path": ["inventory"]
+                },
+                "description": "Test access to admin endpoints with a token that has insufficient privileges"
+              },
+              "response": []
+            }
+          ]
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// This script will run before every request in this collection",
+              "if (!pm.environment.get(\u0027base64_client_credentials\u0027)) {",
+              "    const clientId = \u0027web-client\u0027;",
+              "    const clientSecret = \u0027secret\u0027;",
+              "    const base64Credentials = btoa(clientId + \u0027:\u0027 + clientSecret);",
+              "    pm.environment.set(\u0027base64_client_credentials\u0027, base64Credentials);",
+              "    console.log(\u0027Client credentials encoded and saved to environment\u0027);",
+              "}"
+            ]
+          }
+        }
+      ]
     }
   ],
   "event": [
@@ -1938,19 +3175,19 @@
         "type": "text/javascript",
         "exec": [
           "// Set dynamic variables for testing",
-          "pm.globals.set('timestamp', new Date().toISOString());",
-          "pm.globals.set('currentDate', new Date().toISOString().split('T')[0]);",
-          "pm.globals.set('randomCustomerSuffix', Math.floor(Math.random() * 10000));",
-          "pm.globals.set('customerName', 'TestCustomer_' + pm.globals.get('randomCustomerSuffix'));",
+          "pm.globals.set(\u0027timestamp\u0027, new Date().toISOString());",
+          "pm.globals.set(\u0027currentDate\u0027, new Date().toISOString().split(\u0027T\u0027)[0]);",
+          "pm.globals.set(\u0027randomCustomerSuffix\u0027, Math.floor(Math.random() * 10000));",
+          "pm.globals.set(\u0027customerName\u0027, \u0027TestCustomer_\u0027 + pm.globals.get(\u0027randomCustomerSuffix\u0027));",
           "",
           "// Set default product ID if not exists",
-          "if (!pm.globals.get('productId')) {",
-          "    pm.globals.set('productId', '1');",
+          "if (!pm.globals.get(\u0027productId\u0027)) {",
+          "    pm.globals.set(\u0027productId\u0027, \u00271\u0027);",
           "}",
           "",
           "// Set default order number if not exists",
-          "if (!pm.globals.get('orderNumber')) {",
-          "    pm.globals.set('orderNumber', 'ORDER-' + Date.now());",
+          "if (!pm.globals.get(\u0027orderNumber\u0027)) {",
+          "    pm.globals.set(\u0027orderNumber\u0027, \u0027ORDER-\u0027 + Date.now());",
           "}"
         ]
       }
@@ -1961,86 +3198,86 @@
         "type": "text/javascript",
         "exec": [
           "// Global test scripts for all requests",
-          "pm.test('Response time is acceptable (<5000ms)', function () {",
+          "pm.test(\u0027Response time is acceptable (\u003c5000ms)\u0027, function () {",
           "    pm.expect(pm.response.responseTime).to.be.below(5000);",
           "});",
           "",
-          "pm.test('Response should not contain server error (5xx)', function () {",
+          "pm.test(\u0027Response should not contain server error (5xx)\u0027, function () {",
           "    pm.expect(pm.response.code).to.be.below(500);",
           "});",
           "",
           "// Extract and set variables from response",
-          "if (pm.response.code === 201 && pm.request.name.includes('Create')) {",
+          "if (pm.response.code === 201 \u0026\u0026 pm.request.name.includes(\u0027Create\u0027)) {",
           "    try {",
           "        const responseJson = pm.response.json();",
           "        ",
           "        // Save order number from order creation",
           "        if (responseJson.orderNumber) {",
-          "            pm.globals.set('lastOrderNumber', responseJson.orderNumber);",
-          "            console.log('Saved order number:', responseJson.orderNumber);",
+          "            pm.globals.set(\u0027lastOrderNumber\u0027, responseJson.orderNumber);",
+          "            console.log(\u0027Saved order number:\u0027, responseJson.orderNumber);",
           "        }",
           "        ",
           "        // Save product ID from product creation",
           "        if (responseJson.id) {",
-          "            pm.globals.set('lastProductId', responseJson.id);",
-          "            console.log('Saved product ID:', responseJson.id);",
+          "            pm.globals.set(\u0027lastProductId\u0027, responseJson.id);",
+          "            console.log(\u0027Saved product ID:\u0027, responseJson.id);",
           "        }",
           "    } catch (e) {",
-          "        console.log('Response is not JSON or missing expected fields');",
+          "        console.log(\u0027Response is not JSON or missing expected fields\u0027);",
           "    }",
           "}",
           "",
           "// Log response for debugging",
-          "console.log('Request:', pm.request.name);",
-          "console.log('Response Status:', pm.response.status);",
-          "console.log('Response Time:', pm.response.responseTime + 'ms');",
+          "console.log(\u0027Request:\u0027, pm.request.name);",
+          "console.log(\u0027Response Status:\u0027, pm.response.status);",
+          "console.log(\u0027Response Time:\u0027, pm.response.responseTime + \u0027ms\u0027);",
           "",
           "// Log any errors for debugging",
-          "if (pm.response.code >= 400) {",
-          "    console.log('Error Response Body:', pm.response.text());",
+          "if (pm.response.code \u003e= 400) {",
+          "    console.log(\u0027Error Response Body:\u0027, pm.response.text());",
           "}",
           "",
           "// Rate Limiting Tests",
-          "if (pm.request.name.includes('Rate Limit')) {",
-          "    pm.test('Rate limit headers should be present when rate limited', function () {",
+          "if (pm.request.name.includes(\u0027Rate Limit\u0027)) {",
+          "    pm.test(\u0027Rate limit headers should be present when rate limited\u0027, function () {",
           "        if (pm.response.code === 429) {",
-          "            pm.expect(pm.response.headers.has('X-RateLimit-Remaining')).to.be.true;",
-          "            pm.expect(pm.response.headers.has('X-RateLimit-Retry-After-Seconds')).to.be.true;",
-          "            console.log('Rate limit triggered - remaining:', pm.response.headers.get('X-RateLimit-Remaining'));",
+          "            pm.expect(pm.response.headers.has(\u0027X-RateLimit-Remaining\u0027)).to.be.true;",
+          "            pm.expect(pm.response.headers.has(\u0027X-RateLimit-Retry-After-Seconds\u0027)).to.be.true;",
+          "            console.log(\u0027Rate limit triggered - remaining:\u0027, pm.response.headers.get(\u0027X-RateLimit-Remaining\u0027));",
           "        }",
           "    });",
           "    ",
-          "    pm.test('Rate limit response should contain proper error structure', function () {",
+          "    pm.test(\u0027Rate limit response should contain proper error structure\u0027, function () {",
           "        if (pm.response.code === 429) {",
           "            const responseJson = pm.response.json();",
-          "            pm.expect(responseJson).to.have.property('status', 'RATE_LIMIT_EXCEEDED');",
-          "            pm.expect(responseJson).to.have.property('errorCode', 'TOO_MANY_REQUESTS');",
-          "            pm.expect(responseJson).to.have.property('retryAfter');",
+          "            pm.expect(responseJson).to.have.property(\u0027status\u0027, \u0027RATE_LIMIT_EXCEEDED\u0027);",
+          "            pm.expect(responseJson).to.have.property(\u0027errorCode\u0027, \u0027TOO_MANY_REQUESTS\u0027);",
+          "            pm.expect(responseJson).to.have.property(\u0027retryAfter\u0027);",
           "        }",
           "    });",
           "}",
           "",
           "// Circuit Breaker Tests",
-          "if (pm.request.name.includes('Circuit Breaker') || pm.request.name.includes('Fallback')) {",
-          "    pm.test('Circuit breaker response should contain proper fallback structure', function () {",
+          "if (pm.request.name.includes(\u0027Circuit Breaker\u0027) || pm.request.name.includes(\u0027Fallback\u0027)) {",
+          "    pm.test(\u0027Circuit breaker response should contain proper fallback structure\u0027, function () {",
           "        if (pm.response.code === 503) {",
           "            const responseJson = pm.response.json();",
-          "            pm.expect(responseJson).to.have.property('status', 'CIRCUIT_BREAKER_OPEN');",
-          "            pm.expect(responseJson).to.have.property('errorCode', 'SERVICE_UNAVAILABLE');",
-          "            pm.expect(responseJson).to.have.property('suggestion');",
+          "            pm.expect(responseJson).to.have.property(\u0027status\u0027, \u0027CIRCUIT_BREAKER_OPEN\u0027);",
+          "            pm.expect(responseJson).to.have.property(\u0027errorCode\u0027, \u0027SERVICE_UNAVAILABLE\u0027);",
+          "            pm.expect(responseJson).to.have.property(\u0027suggestion\u0027);",
           "        }",
           "    });",
           "}",
           "",
           "// Load Testing",
-          "if (pm.request.name.includes('Load Test') || pm.request.name.includes('Stress Test')) {",
-          "    pm.test('Load test response time should be reasonable', function () {",
+          "if (pm.request.name.includes(\u0027Load Test\u0027) || pm.request.name.includes(\u0027Stress Test\u0027)) {",
+          "    pm.test(\u0027Load test response time should be reasonable\u0027, function () {",
           "        pm.expect(pm.response.responseTime).to.be.below(10000); // 10 seconds max for load tests",
           "    });",
           "    ",
-          "    pm.test('Load test should handle rate limiting gracefully', function () {",
+          "    pm.test(\u0027Load test should handle rate limiting gracefully\u0027, function () {",
           "        if (pm.response.code === 429) {",
-          "            console.log('Rate limiting triggered during load test - this is expected behavior');",
+          "            console.log(\u0027Rate limiting triggered during load test - this is expected behavior\u0027);",
           "        } else {",
           "            pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
           "        }",

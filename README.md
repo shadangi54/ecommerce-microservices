@@ -9,6 +9,8 @@
 
 A comprehensive microservices-based e-commerce platform built with **Spring Boot**, featuring automatic inventory management, order processing, and real-time notifications through **Apache Kafka**. The system demonstrates enterprise-level patterns including **Feign Client** integration, **distributed caching**, and **event-driven architecture**.
 
+> ⚠️ **SECURITY NOTICE**: Security is currently disabled in this version of the application. All OAuth2/JWT security has been commented out to facilitate easier testing and development. For production use, please re-enable security features.
+
 ## 🏗️ Architecture Overview
 
 ```mermaid
@@ -21,7 +23,7 @@ graph TB
     
     %% Gateway Layer
     subgraph "🎯 Gateway Layer"
-        Gateway[Gateway Service<br/>Port: 9090<br/>Routing • Rate Limiting • Circuit Breaker • JWT Auth]
+        Gateway[Gateway Service<br/>Port: 9090<br/>Routing • Rate Limiting • Circuit Breaker • JWT Auth (Disabled)]
     end
     
     %% Service Registry Layer
@@ -29,9 +31,9 @@ graph TB
         Discovery[Discovery Service<br/>Eureka Server<br/>Port: 8761<br/>Registration • Health Checks]
     end
     
-    %% Authentication Layer
+    %% Authentication Layer (Currently Disabled)
     subgraph "🔒 Authentication Layer"
-        Auth[Auth Service<br/>Port: 8084<br/>Authentication • Authorization • JWT]
+        Auth[Auth Service<br/>Port: 8084<br/>Authentication • Authorization • JWT<br/>(Security Disabled)]
     end
     
     %% Business Services Layer
@@ -81,9 +83,9 @@ graph TB
     Gateway --> IS
     Gateway --> Auth
     
-    %% Auth Flow
+    %% Auth Flow (Currently Disabled)
     Client -.-> Auth
-    Gateway -.->|JWT Validation| Auth
+    Gateway -.->|JWT Validation Disabled| Auth
     
     %% Service Discovery Connections
     Gateway -.->|Register & Discover| Discovery
@@ -440,33 +442,27 @@ cd auth-service
 mvn clean spring-boot:run
 ```
 
-### 5️⃣ Enable or Disable Security
+### 5️⃣ Security Status
 
-**To enable JWT security:**
+The security in this application is currently disabled for easier testing and development.
 
-1. Open `gateway-service/src/main/java/com/shadangi54/gateway/GatewayServiceApplication.java`
-2. For each service route, uncomment the JWT filter line:
-   ```java
-   // From:
-   //.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
-   
-   // To:
-   .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
-   ```
-3. Save and restart the Gateway Service
+**Current Security Status: DISABLED**
 
-**To disable JWT security:**
+All security-related configurations have been commented out in the following files:
+- Auth Service: `SecurityConfig.java` and `application.properties`
+- Gateway Service: `SecurityConfig.java` and `application.properties`
+- Product Service: `SecurityConfig.java`
+- Order Service: `SecurityConfig.java`
+- Inventory Service: `SecurityConfig.java`
+- Notification Service: `SecurityConfig.java`
 
-1. Open `gateway-service/src/main/java/com/shadangi54/gateway/GatewayServiceApplication.java`
-2. For each service route, comment out the JWT filter line:
-   ```java
-   // From:
-   .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
-   
-   // To:
-   //.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
-   ```
-3. Save and restart the Gateway Service
+**To re-enable security:**
+
+1. Uncomment the security configurations in all the above files
+2. Restart all services, ensuring the auth-service is running
+3. Use the Postman collection to obtain authentication tokens for API access
+
+**Note:** In production environments, it's recommended to always keep security enabled.
 
 For more detailed security information, see [SECURITY.md](SECURITY.md).
 For testing procedures, see [TESTING.md](TESTING.md).

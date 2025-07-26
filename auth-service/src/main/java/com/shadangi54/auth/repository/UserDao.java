@@ -10,7 +10,8 @@ import com.shadangi54.auth.entity.User;
 @Repository
 public interface UserDao extends JpaRepository<User, Long>{
 	
-	Optional<User> findByUserName(String userName);
-	Boolean existsByUserName(String userName);
-	Boolean existsByEmail(String email);
+	Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 }

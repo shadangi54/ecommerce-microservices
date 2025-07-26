@@ -1,6 +1,10 @@
 package com.shadangi54.order.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shadangi54.order.DTO.OrderDTO;
+import com.shadangi54.order.event.OrderFailedEvent;
 import com.shadangi54.order.event.OrderPlacedEvent;
 import com.shadangi54.order.exception.OrderServiceException;
 import com.shadangi54.order.manager.OrderManager;
@@ -31,7 +36,7 @@ public class OrderController {
 	
 	private OrderManager orderManager;
 	
-	private KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+	private KafkaTemplate<String, Object> kafkaTemplate;
 	
 	@GetMapping("/customer/{customerName}")
 	public ResponseEntity<Object> getAllOrdersForCustomer(@PathVariable String customerName){
@@ -74,21 +79,46 @@ public class OrderController {
 	public ResponseEntity<Object> createOrder(@RequestBody OrderDTO orderDTO) {
 		LOGGER.info("Creating new order: {}", orderDTO);
 		try {
-			OrderDTO createdOrder = orderManager.createOrder(orderDTO);
-			LOGGER.info("Order created successfully: {}", createdOrder);
+			// Generate a unique order number using date-time and UUID
+			String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+			String uniqueOrderNumber = dateTime + "-" + UUID.randomUUID().toString();
+			OrderDTO pendingOrder = new OrderDTO();
+			pendingOrder.setOrderNumber(uniqueOrderNumber);
+			pendingOrder.setStatus("PENDING");
+			pendingOrder.setCustomerName(orderDTO.getCustomerName());
 			
-			// Send order placed event to Kafka topic
-			kafkaTemplate.send("shadangi54-notification-topic",
-					new OrderPlacedEvent(createdOrder.getCustomerName(), createdOrder.getOrderNumber()));
+			CompletableFuture.runAsync(() ->{
+				
+				try {
+					// Complete actual order processing in background
+					orderDTO.setOrderNumber(uniqueOrderNumber);
+	                OrderDTO completedOrder = orderManager.createOrder(orderDTO);
+	                
+	             // Send order placed event to Kafka topic
+	                kafkaTemplate.send("shadangi54-notification-topic",
+	                        new OrderPlacedEvent(completedOrder.getCustomerName(), completedOrder.getOrderNumber()));
+	                
+	                LOGGER.info("Order processed asynchronously: {}", completedOrder);
+	                
+				}catch (OrderServiceException e) {
+					LOGGER.error("Invalid order data: {}", orderDTO, e);
+	                // Send failure notification
+	                kafkaTemplate.send("shadangi54-notification-topic",
+	                        new OrderFailedEvent(orderDTO.getCustomerName(), uniqueOrderNumber, e.getMessage()));
+				} catch (Exception e) {
+					LOGGER.error("Error in async order processing: {}", orderDTO, e);
+	                // Send failure notification
+	                kafkaTemplate.send("shadangi54-notification-topic",
+	                        new OrderFailedEvent(orderDTO.getCustomerName(), uniqueOrderNumber, e.getMessage()));
+				}
+			});
 			
-			
-			return ResponseEntity.status(201).body(createdOrder);
-		} catch (OrderServiceException e) {
-			LOGGER.error("Invalid order data: {}", orderDTO, e);
-			return ResponseEntity.badRequest().body(e.getMessage());
+			//Return pending order response immediately
+			LOGGER.info("Order created and pending: {}", pendingOrder);
+			return ResponseEntity.accepted().body("Order is being processed. Order number: " + uniqueOrderNumber);
 		} catch (Exception e) {
-			LOGGER.error("Error creating order: {}", orderDTO, e);
-			return ResponseEntity.status(500).build();
+			 LOGGER.error("Error initiating order: {}", orderDTO, e);
+		        return ResponseEntity.status(500).body("Failed to initiate order process: " + e.getMessage());
 		}
 	}
 	

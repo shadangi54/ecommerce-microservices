@@ -12,7 +12,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
-import com.shadangi54.gateway.filter.JwtAuthenticationFilter;
 import com.shadangi54.gateway.ratelimiter.CustomRateLimiterGatewayFilterFactory;
 
 @SpringBootApplication
@@ -28,8 +27,7 @@ public class GatewayServiceApplication {
 	@Bean
 	public RouteLocator customRouteLocator(RouteLocatorBuilder builder,
 //			RedisRateLimiter redisRateLimiter
-			CustomRateLimiterGatewayFilterFactory customRateLimiter,
-			JwtAuthenticationFilter jwtAuthenticationFilter
+			CustomRateLimiterGatewayFilterFactory customRateLimiter
 			) {
 
 		return builder.routes()
@@ -38,13 +36,16 @@ public class GatewayServiceApplication {
 	            .route("auth-service",
 	                    r -> r.path("/auth/**")
 	                          .uri("lb://auth-service"))
-	                          
-	            // H2 Console for Auth Service
-	            .route("auth-h2-console",
-	                    r -> r.path("/auth/h2-console/**")
-	                          .filters(f -> f.rewritePath("/auth/h2-console/(?<segment>.*)", "/h2-console/${segment}"))
-	                          .uri("lb://auth-service"))
 	            
+	            // Auth Service H2-Console route
+	            .route("auth-service-h2-console",
+	                    r -> r.path("/auth/h2-console/**")
+	                          .filters(f -> f
+	                                 .rewritePath("/auth/h2-console/(?<segment>.*)", "/h2-console/${segment}")
+	                                 .addResponseHeader("X-Frame-Options", "SAMEORIGIN")
+	                                 .addResponseHeader("Content-Security-Policy", "frame-ancestors 'self'"))
+	                          .uri("lb://auth-service"))
+	                          
 				 // Product Service Routes with Circuit Breaker
 				.route("product-service",
 						r -> r.path("/products/**")
@@ -56,7 +57,6 @@ public class GatewayServiceApplication {
 //												.setRateLimiter(redisRateLimiter)
 //												.setKeyResolver(exchange -> Mono.just("product-service-rate-limit")))
 										.filter(customRateLimiter.apply(c->c.setRouteId("product-service-rate-limit")))
-//										.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
 										)
 								.uri("lb://product-service"))
 				
@@ -71,7 +71,6 @@ public class GatewayServiceApplication {
 //												.setRateLimiter(redisRateLimiter)
 //												.setKeyResolver(exchange -> Mono.just("order-service-rate-limit")))
 										.filter(customRateLimiter.apply(c->c.setRouteId("order-service-rate-limit")))
-//										.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
 										)
 								.uri("lb://order-service"))
 				
@@ -86,7 +85,6 @@ public class GatewayServiceApplication {
 //												.setRateLimiter(redisRateLimiter)
 //												.setKeyResolver(exchange -> Mono.just("inventory-service-rate-limit")))
 										.filter(customRateLimiter.apply(c->c.setRouteId("inventory-service-rate-limit")))
-//										.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
 										)
 								.uri("lb://inventory-service"))
 				.route("product-service-health", r -> r.path("/health/product")
@@ -130,7 +128,8 @@ public class GatewayServiceApplication {
                 .path("/auth/h2-console/**")
                 .filters(f -> f
                     .removeRequestHeader("X-Frame-Options")
-                    .addResponseHeader("X-Frame-Options", "SAMEORIGIN"))
+                    .addResponseHeader("X-Frame-Options", "SAMEORIGIN")
+                    .rewritePath("/auth/h2-console/(?<segment>.*)", "/h2-console/${segment}"))
                 .uri("lb://auth-service"))
             .build();
     }

@@ -18,9 +18,9 @@ public class NotificationServiceApplication {
 		SpringApplication.run(NotificationServiceApplication.class, args);
 	}
 	
-	@KafkaListener(topics = "shadangi54-notification-topic")
-	public void handleNotification(OrderPlacedEvent orderPlacedEvent) {
-		//Send out an email notification
-		LOGGER.info("Received order placed event: {}", orderPlacedEvent);
-	}
+//	@KafkaListener(topics = "shadangi54-notification-topic")
+//	public void handleNotification(OrderPlacedEvent orderPlacedEvent) {
+//		//Send out an email notification
+//		LOGGER.info("Received order placed event: {}", orderPlacedEvent);
+//	}
 }

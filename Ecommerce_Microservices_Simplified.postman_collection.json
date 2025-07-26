@@ -1,0 +1,271 @@
+{
+  "info": {
+    "name": "Ecommerce Microservices API - Simplified (Security Disabled)",
+    "description": "Simplified collection for core e-commerce microservices functionality. Security has been disabled in this version of the application for easier testing and development.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "⚠️ SECURITY NOTICE",
+      "item": [
+        {
+          "name": "Security is disabled - No auth tokens required",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/",
+              "host": ["{{gatewayUrl}}"],
+              "path": [""]
+            },
+            "description": "Security has been disabled in this version of the application. All Authorization headers in this collection can be ignored. You can directly access all endpoints without authentication."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"test1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/auth/register",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register a new user"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.environment.set('authToken', jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"test1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/auth/signin",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["auth", "signin"]
+            },
+            "description": "Authenticate user and get JWT token"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Product Service",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Get list of all products"
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products/{{productId}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Get product details by ID"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Order Service",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/orders",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Create a new order"
+          }
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/orders/{{orderId}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            },
+            "description": "Get order details by ID"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory Service",
+      "item": [
+        {
+          "name": "Check Stock",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/inventory/{{productId}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["inventory", "{{productId}}"]
+            },
+            "description": "Check product stock availability"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Checks",
+      "item": [
+        {
+          "name": "Gateway Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/actuator/health",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["actuator", "health"]
+            },
+            "description": "Check gateway service health"
+          }
+        },
+        {
+          "name": "Product Service Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/health/product",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["health", "product"]
+            },
+            "description": "Check product service health"
+          }
+        },
+        {
+          "name": "Order Service Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/health/order",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["health", "order"]
+            },
+            "description": "Check order service health"
+          }
+        },
+        {
+          "name": "Inventory Service Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/health/inventory",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["health", "inventory"]
+            },
+            "description": "Check inventory service health"
+          }
+        }
+      ]
+    }
+  ]
+}

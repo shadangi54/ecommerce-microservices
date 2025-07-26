@@ -14,6 +14,7 @@ import com.shadangi54.order.DTO.InventoryDTO;
 import com.shadangi54.order.DTO.OrderDTO;
 import com.shadangi54.order.DTO.OrderProductDTO;
 import com.shadangi54.order.DTO.OrderStatus;
+import com.shadangi54.order.DTO.OrderStatusDTO;
 import com.shadangi54.order.entity.Order;
 import com.shadangi54.order.entity.OrderProduct;
 import com.shadangi54.order.exception.OrderServiceException;
@@ -112,12 +113,7 @@ public class OrderManager {
 		order.setCreatedBy("system"); // Set created by user, can be modified as needed
 		order.setModifiedBy("system");
 		order.setStatus(OrderStatus.PENDING); // Default status for new orders
-		
-		//create a unique order number using date time
-		// Generate a unique order number using date-time and UUID
-		String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-		String uniqueOrderNumber = dateTime + "-" + UUID.randomUUID().toString();
-		order.setOrderNumber(uniqueOrderNumber); // Ensure order number is set
+		order.setOrderNumber(orderDTO.getOrderNumber()); // Ensure order number is set
 
 		// Ensure FK referencing for each product
 		if (order.getProducts() != null) {
@@ -160,6 +156,25 @@ public class OrderManager {
 		order = orderDAO.save(order);
 		LOGGER.info("Order updated successfully with ID: {}", order.getOrderNumber());
 		return orderMapper.toDTO(order);
+	}
+
+	public OrderStatusDTO getOrderStatus(String orderId) {
+		if (orderId == null || orderId.trim().isEmpty()) {
+		LOGGER.error("Invalid order ID: {}", orderId);
+		throw new OrderServiceException("Order ID cannot be null or empty");
+		}
+		LOGGER.info("Fetching status for order ID: {}", orderId);
+		Order order = orderDAO.findByOrderNumber(orderId);
+		if (order == null || order.getIsDeleted()) {
+			LOGGER.info("No order found with ID: {}", orderId);
+			return null; // Return null if no order is found
+		}
+		OrderStatusDTO statusDTO = new OrderStatusDTO();
+		statusDTO.setOrderId(order.getOrderNumber());
+		statusDTO.setStatus(order.getStatus().name());
+		statusDTO.setMessage("Order status retrieved successfully");
+		LOGGER.info("Status found for order ID: {}", orderId);
+		return statusDTO;
 	}
 
 }
