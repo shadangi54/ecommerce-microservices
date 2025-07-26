@@ -2,11 +2,9 @@ package com.shadangi54.gateway;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -14,9 +12,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+import com.shadangi54.gateway.filter.JwtAuthenticationFilter;
 import com.shadangi54.gateway.ratelimiter.CustomRateLimiterGatewayFilterFactory;
-
-import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -31,10 +28,23 @@ public class GatewayServiceApplication {
 	@Bean
 	public RouteLocator customRouteLocator(RouteLocatorBuilder builder,
 //			RedisRateLimiter redisRateLimiter
-			CustomRateLimiterGatewayFilterFactory customRateLimiter
+			CustomRateLimiterGatewayFilterFactory customRateLimiter,
+			JwtAuthenticationFilter jwtAuthenticationFilter
 			) {
 
 		return builder.routes()
+				
+				// Auth Service Route (without JWT Filter)
+	            .route("auth-service",
+	                    r -> r.path("/auth/**")
+	                          .uri("lb://auth-service"))
+	                          
+	            // H2 Console for Auth Service
+	            .route("auth-h2-console",
+	                    r -> r.path("/auth/h2-console/**")
+	                          .filters(f -> f.rewritePath("/auth/h2-console/(?<segment>.*)", "/h2-console/${segment}"))
+	                          .uri("lb://auth-service"))
+	            
 				 // Product Service Routes with Circuit Breaker
 				.route("product-service",
 						r -> r.path("/products/**")
@@ -46,6 +56,7 @@ public class GatewayServiceApplication {
 //												.setRateLimiter(redisRateLimiter)
 //												.setKeyResolver(exchange -> Mono.just("product-service-rate-limit")))
 										.filter(customRateLimiter.apply(c->c.setRouteId("product-service-rate-limit")))
+//										.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
 										)
 								.uri("lb://product-service"))
 				
@@ -60,6 +71,7 @@ public class GatewayServiceApplication {
 //												.setRateLimiter(redisRateLimiter)
 //												.setKeyResolver(exchange -> Mono.just("order-service-rate-limit")))
 										.filter(customRateLimiter.apply(c->c.setRouteId("order-service-rate-limit")))
+//										.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
 										)
 								.uri("lb://order-service"))
 				
@@ -74,6 +86,7 @@ public class GatewayServiceApplication {
 //												.setRateLimiter(redisRateLimiter)
 //												.setKeyResolver(exchange -> Mono.just("inventory-service-rate-limit")))
 										.filter(customRateLimiter.apply(c->c.setRouteId("inventory-service-rate-limit")))
+//										.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
 										)
 								.uri("lb://inventory-service"))
 				.route("product-service-health", r -> r.path("/health/product")
@@ -102,11 +115,24 @@ public class GatewayServiceApplication {
 		corsConfig.addAllowedMethod("*");
 		corsConfig.addAllowedHeader("*");
 		corsConfig.setAllowCredentials(true);
+		corsConfig.addExposedHeader("X-Frame-Options");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", corsConfig);
 
 		return new CorsWebFilter(source);
 	}
+	
+	@Bean
+    public RouteLocator h2ConsoleRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+            .route("h2-console-route", r -> r
+                .path("/auth/h2-console/**")
+                .filters(f -> f
+                    .removeRequestHeader("X-Frame-Options")
+                    .addResponseHeader("X-Frame-Options", "SAMEORIGIN"))
+                .uri("lb://auth-service"))
+            .build();
+    }
 
 }

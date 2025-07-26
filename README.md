@@ -21,12 +21,17 @@ graph TB
     
     %% Gateway Layer
     subgraph "🎯 Gateway Layer"
-        Gateway[Gateway Service<br/>Port: 9090<br/>Routing • Rate Limiting • Circuit Breaker]
+        Gateway[Gateway Service<br/>Port: 9090<br/>Routing • Rate Limiting • Circuit Breaker • JWT Auth]
     end
     
     %% Service Registry Layer
     subgraph "🔍 Service Registry"
         Discovery[Discovery Service<br/>Eureka Server<br/>Port: 8761<br/>Registration • Health Checks]
+    end
+    
+    %% Authentication Layer
+    subgraph "🔒 Authentication Layer"
+        Auth[Auth Service<br/>Port: 8084<br/>Authentication • Authorization • JWT]
     end
     
     %% Business Services Layer
@@ -55,6 +60,7 @@ graph TB
         PDB[(Product DB<br/>H2 Memory<br/>Products • Categories)]
         ODB[(Order DB<br/>H2 Memory<br/>Orders • Line Items)]
         IDB[(Inventory DB<br/>H2 Memory<br/>Stock • Reservations)]
+        ADB[(Auth DB<br/>H2 Memory<br/>Users • Roles)]
     end
     
     %% Infrastructure Layer
@@ -73,6 +79,11 @@ graph TB
     Gateway --> OS
     Gateway --> PS
     Gateway --> IS
+    Gateway --> Auth
+    
+    %% Auth Flow
+    Client -.-> Auth
+    Gateway -.->|JWT Validation| Auth
     
     %% Service Discovery Connections
     Gateway -.->|Register & Discover| Discovery
@@ -80,6 +91,7 @@ graph TB
     OS -.->|Register & Health Check| Discovery
     IS -.->|Register & Health Check| Discovery
     NS -.->|Register & Health Check| Discovery
+    Auth -.->|Register & Health Check| Discovery
     
     %% Inter-Service Communication
     OS -.->|Feign Client<br/>Stock Check| IS
@@ -90,6 +102,7 @@ graph TB
     PS --> PDB
     OS --> ODB
     IS --> IDB
+    Auth --> ADB
     
     %% Infrastructure Connections
     PS -.->|Cache Products| Redis
@@ -100,11 +113,13 @@ graph TB
     classDef dbBox fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
     classDef infraBox fill:#fff3e0,stroke:#e65100,stroke-width:2px
     classDef clientBox fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef authBox fill:#ffebee,stroke:#c62828,stroke-width:2px
     
     class PS,OS,IS,NS,Gateway,Discovery serviceBox
-    class PDB,ODB,IDB dbBox
+    class PDB,ODB,IDB,ADB dbBox
     class Kafka,Redis infraBox
     class Client,LoadBalancer clientBox
+    class Auth authBox
 ```
 
 ## 🚀 Key Features
@@ -123,6 +138,7 @@ graph TB
 - ✅ **Rate Limiting** - Redis-based rate limiting with custom responses
 - ✅ **Circuit Breaker** - Resilience4j integration with fallback controllers
 - ✅ **Load Balancing** - Distribute requests across service instances
+- ✅ **JWT Authentication** - Token-based security with validation
 - ✅ **CORS Handling** - Cross-origin resource sharing configuration
 - ✅ **Custom Fallback** - Graceful degradation with detailed error responses
 - ✅ **Request/Response Logging** - Centralized monitoring and tracing
@@ -163,6 +179,7 @@ graph TB
 | **Backend** | Spring Boot | 3.x | Core application framework |
 | **API Gateway** | Spring Cloud Gateway | 4.x | API Gateway and routing |
 | **Service Discovery** | Netflix Eureka | 4.x | Service registration and discovery |
+| **Security** | Spring Security + JWT | 3.x | Authentication and authorization |
 | **Language** | Java | 17+ | Programming language |
 | **Build** | Maven | 3.x | Dependency management & build |
 | **Database** | H2 Database | 2.x | In-memory database for development |
@@ -188,10 +205,26 @@ ecommerce-microservices/
 ├── 📦 gateway-service/             # API Gateway microservice
 │   ├── src/main/java/com/shadangi54/gateway/
 │   │   ├── controller/            # Fallback controllers
+│   │   ├── filter/                # JWT filter and other gateway filters
 │   │   ├── ratelimiter/           # Custom rate limiter implementation
 │   │   └── GatewayServiceApplication.java
 │   └── src/main/resources/
 │       └── application.properties # Gateway configuration
+│
+├── 📦 auth-service/                # Authentication microservice
+│   ├── src/main/java/com/shadangi54/auth/
+│   │   ├── controller/            # Auth API endpoints
+│   │   ├── manager/               # User details service implementation
+│   │   ├── security/              # Spring Security configuration
+│   │   │   ├── jwt/               # JWT utilities and filters
+│   │   │   └── WebSecurityConfig.java
+│   │   ├── entity/                # User and Role entities
+│   │   ├── repository/            # Data access layer
+│   │   └── dto/                   # Request/response objects
+│   └── src/main/resources/
+│       ├── application.properties # Auth configuration
+│       ├── schema.sql             # Database schema
+│       └── data.sql               # Default users and roles
 │
 ├── 📦 product-service/               # Product management microservice
 │   ├── src/main/java/com/shadangi54/product/
@@ -235,8 +268,11 @@ ecommerce-microservices/
 │       └── event/                 # Event handler classes
 │
 ├── 📄 Ecommerce_Microservices_Gateway_v5.postman_collection.json
-├── 📄 Ecommerce_Microservices_Complete_v4.postman_collection.json  # Legacy
+├── 📄 Ecommerce_Microservices_Complete_Final.postman_collection.json
+├── 📄 Ecommerce_Microservices_Environment.postman_environment.json
 ├── 📄 README.md                    # This file
+├── 📄 SECURITY.md                  # Security implementation details
+├── 📄 TESTING.md                   # Testing procedures and examples
 └── 📄 Architecture.txt             # Additional architecture notes
 ```
 
@@ -397,6 +433,66 @@ mvn clean spring-boot:run
 cd gateway-service
 mvn clean spring-boot:run
 ```
+
+**Terminal 3 - Auth Service (Start Third for security features):**
+```bash
+cd auth-service
+mvn clean spring-boot:run
+```
+
+### 5️⃣ Enable or Disable Security
+
+**To enable JWT security:**
+
+1. Open `gateway-service/src/main/java/com/shadangi54/gateway/GatewayServiceApplication.java`
+2. For each service route, uncomment the JWT filter line:
+   ```java
+   // From:
+   //.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
+   
+   // To:
+   .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
+   ```
+3. Save and restart the Gateway Service
+
+**To disable JWT security:**
+
+1. Open `gateway-service/src/main/java/com/shadangi54/gateway/GatewayServiceApplication.java`
+2. For each service route, comment out the JWT filter line:
+   ```java
+   // From:
+   .filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
+   
+   // To:
+   //.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
+   ```
+3. Save and restart the Gateway Service
+
+For more detailed security information, see [SECURITY.md](SECURITY.md).
+For testing procedures, see [TESTING.md](TESTING.md).
+
+### 6️⃣ Start Other Services
+
+1. Register a new user (if needed):
+   ```bash
+   curl -X POST http://localhost:9090/auth/signup \
+     -H "Content-Type: application/json" \
+     -d '{"username":"testuser","email":"test@example.com","password":"password123","roles":["user"]}'
+   ```
+
+2. Authenticate and get a token:
+   ```bash
+   curl -X POST http://localhost:9090/auth/signin \
+     -H "Content-Type: application/json" \
+     -d '{"username":"testuser","password":"password123"}'
+   ```
+
+3. Use the token for secured endpoints:
+   ```bash
+   curl -H "Authorization: Bearer YOUR_JWT_TOKEN" http://localhost:9090/products
+   ```
+
+For more detailed security information, see [SECURITY.md](SECURITY.md).
 
 **Terminal 3 - Product Service:**
 ```bash
@@ -677,6 +773,32 @@ curl http://localhost:8761/eureka/apps/PRODUCT-SERVICE
 # Open browser: http://localhost:8761
 ```
 
+**Authentication Issues**
+```bash
+# Check if Auth Service is running
+curl http://localhost:8084/actuator/health
+# Should return {"status":"UP"}
+
+# Try a test authentication
+curl -X POST http://localhost:9090/auth/signin \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'
+# Should return JWT token
+
+# Verify JWT token
+curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:9090/products
+# Should return products list or 401 if security is enabled and token is invalid
+```
+
+**Security Configuration Issues**
+```bash
+# Check if JWT filter is enabled in Gateway
+# 1. Look for commented lines in GatewayServiceApplication.java:
+#    //.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config()))
+# 2. Uncomment these lines to enable JWT authentication
+# 3. Restart the Gateway Service
+```
+
 **Service Won't Start**
 ```bash
 # Check if ports are already in use
@@ -685,6 +807,7 @@ netstat -an | grep :9090  # Gateway
 netstat -an | grep :8080  # Product
 netstat -an | grep :8081  # Order
 netstat -an | grep :8082  # Inventory
+netstat -an | grep :8084  # Auth
 
 # Kill process using the port
 kill -9 $(lsof -t -i:8761)

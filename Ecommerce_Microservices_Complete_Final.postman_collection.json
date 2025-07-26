@@ -13,6 +13,332 @@
   },
   "item": [
     {
+      "name": "🔒 Authentication Service APIs",
+      "description": "User authentication and authorization endpoints for secure access to microservices",
+      "item": [
+        {
+          "name": "Direct Auth Test (Debug)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Just log the response without any processing",
+                  "if (!pm.response) {",
+                  "    console.log(\"Error: pm.response is undefined\");",
+                  "    return;",
+                  "}",
+                  "console.log(\"Response Status: \" + (pm.response.code || 'No status code'));",
+                  "console.log(\"Response Body: \" + (pm.response.text() || 'No response text'));",
+                  "try {",
+                  "    var jsonData = pm.response.json();",
+                  "    console.log(\"Response as JSON: \" + JSON.stringify(jsonData, null, 2));",
+                  "    if (jsonData) {",
+                  "        console.log(\"Token field exists: \" + (jsonData.token !== undefined));",
+                  "        console.log(\"AccessToken field exists: \" + (jsonData.accessToken !== undefined));",
+                  "        console.log(\"Type of response: \" + typeof jsonData);",
+                  "        console.log(\"Available fields: \" + Object.keys(jsonData));",
+                  "    } else {",
+                  "        console.log(\"jsonData is null or undefined\");",
+                  "    }",
+                  "} catch(e) {",
+                  "    console.log(\"Error parsing response: \" + e.message);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"test1234\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8084/auth/signin",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["auth", "signin"]
+            },
+            "description": "Debug request to directly test authentication service response"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Response Structure (Debug)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Very simple response structure test - avoid any complex operations",
+                  "try {",
+                  "    // Check if we have a response",
+                  "    if (!pm.response) {",
+                  "        console.log(\"Error: pm.response is undefined\");",
+                  "        return;",
+                  "    }",
+                  "    ",
+                  "    // Log basic response info",
+                  "    console.log(\"Response Status: \" + pm.response.code);",
+                  "    ",
+                  "    // Get response as text first",
+                  "    var responseText = pm.response.text();",
+                  "    console.log(\"Response Body: \" + responseText);",
+                  "    ",
+                  "    // Only try to parse if we have content",
+                  "    if (responseText && responseText.trim()) {",
+                  "        try {",
+                  "            var jsonData = JSON.parse(responseText);",
+                  "            console.log(\"Response parsed as JSON successfully\");",
+                  "            ",
+                  "            // Safely check for object type and log fields",
+                  "            if (jsonData && typeof jsonData === 'object') {",
+                  "                console.log(\"Available fields: \" + Object.keys(jsonData).join(', '));",
+                  "                ",
+                  "                // Log specific fields we're interested in",
+                  "                console.log(\"Has token field: \" + (jsonData.token !== undefined));",
+                  "                console.log(\"Has accessToken field: \" + (jsonData.accessToken !== undefined));",
+                  "            } else {",
+                  "                console.log(\"Response is not a JSON object\");",
+                  "            }",
+                  "        } catch(e) {",
+                  "            console.log(\"Error parsing JSON: \" + e.message);",
+                  "        }",
+                  "    } else {",
+                  "        console.log(\"Response body is empty\");",
+                  "    }",
+                  "} catch(e) {",
+                  "    console.log(\"Script error: \" + e.message);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8084/auth/test-response",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["auth", "test-response"]
+            },
+            "description": "Debug request to test response structure from auth service"
+          },
+          "response": []
+        },
+        {
+          "name": "User Registration (Signup)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"test1234\",\n  \"roles\": [\"user\"]\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/auth/signup",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["auth", "signup"]
+            },
+            "description": "Register a new user with basic user role"
+          },
+          "response": []
+        },
+        {
+          "name": "User Login (Signin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Simple and direct approach to extract token",
+                  "try {",
+                  "    // Log basic response info",
+                  "    console.log('Response status: ' + (pm.response ? pm.response.code : 'No response code'));",
+                  "",
+                  "    // Only proceed if we have a valid response",
+                  "    if (pm.response && pm.response.code === 200) {",
+                  "        // Get response as text first to log it",
+                  "        var responseText = pm.response.text();",
+                  "        console.log('Response received: ' + responseText);",
+                  "        ",
+                  "        // Try to parse as JSON",
+                  "        try {",
+                  "            var jsonData = JSON.parse(responseText);",
+                  "            ",
+                  "            // Direct token extraction - no complex logic",
+                  "            if (jsonData) {",
+                  "                if (jsonData.token) {",
+                  "                    pm.environment.set('auth_token', jsonData.token);",
+                  "                    console.log('Token saved from token field');",
+                  "                } else if (jsonData.accessToken) {",
+                  "                    pm.environment.set('auth_token', jsonData.accessToken);",
+                  "                    console.log('Token saved from accessToken field');",
+                  "                } else {",
+                  "                    console.log('No token found in expected fields');",
+                  "                    console.log('Available fields: ' + Object.keys(jsonData).join(', '));",
+                  "                }",
+                  "            } else {",
+                  "                console.log('Response parsed as JSON but is null or undefined');",
+                  "            }",
+                  "        } catch (e) {",
+                  "            console.log('Error parsing JSON: ' + e.message);",
+                  "        }",
+                  "    } else {",
+                  "        console.log('No valid response or non-200 status code');",
+                  "    }",
+                  "} catch (error) {",
+                  "    console.log('Script error: ' + error.message);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"test1234\"\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/auth/signin",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["auth", "signin"]
+            },
+            "description": "Authenticate user and get JWT token - automatically saves token to environment variable"
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "    if (!pm.response) {",
+                  "        console.log(\"Error: pm.response is undefined\");",
+                  "        return;",
+                  "    }",
+                  "    if (pm.response.code === 200) {",
+                  "        try {",
+                  "            var jsonData = pm.response.json();",
+                  "            if (jsonData && jsonData.token) {",
+                  "                pm.environment.set(\"admin_token\", jsonData.token);",
+                  "                console.log(\"Admin token saved: \" + jsonData.token);",
+                  "            } else if (jsonData && jsonData.accessToken) {",
+                  "                pm.environment.set(\"admin_token\", jsonData.accessToken);",
+                  "                console.log(\"Admin token saved from accessToken: \" + jsonData.accessToken);",
+                  "            } else {",
+                  "                console.log(\"Admin token not found in response. Response body: \" + JSON.stringify(jsonData));",
+                  "            }",
+                  "        } catch (jsonError) {",
+                  "            console.log(\"Error parsing JSON: \" + jsonError.message);",
+                  "            console.log(\"Response text: \" + (pm.response.text() || 'No response text'));",
+                  "        }",
+                  "    } else {",
+                  "        console.log(\"Non-200 response received: \" + pm.response.code);",
+                  "        console.log(\"Response body: \" + (pm.response.text() || 'No response text'));",
+                  "    }",
+                  "} catch (error) {",
+                  "    console.log(\"Error in test script: \" + error.message);",
+                  "    if (pm.response) {",
+                  "        console.log(\"Response body: \" + (pm.response.text() || 'No response text'));",
+                  "    } else {",
+                  "        console.log(\"pm.response is undefined\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/auth/signin",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["auth", "signin"]
+            },
+            "description": "Login with admin credentials - automatically saves admin token to environment variable"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Moderator User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"moderator_user\",\n  \"email\": \"moderator@example.com\",\n  \"password\": \"mod1234\",\n  \"roles\": [\"mod\"]\n}"
+            },
+            "url": {
+              "raw": "{{gatewayUrl}}/auth/signup",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["auth", "signup"]
+            },
+            "description": "Register a new moderator user"
+          },
+          "response": []
+        },
+        {
+          "name": "H2 Console Access",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/auth/h2-console",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["auth", "h2-console"]
+            },
+            "description": "Access H2 console through gateway (redirects to H2 database console)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "🎯 Gateway Service APIs",
       "description": "Gateway health checks, route management, and fallback endpoints",
       "item": [
@@ -195,6 +521,149 @@
               "path": ["actuator", "metrics"]
             },
             "description": "View gateway metrics including rate limiting"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔐 Security Testing Scenarios",
+      "description": "Test JWT authentication, authorization, and security features",
+      "item": [
+        {
+          "name": "Access Protected Endpoint Without Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Attempt to access protected endpoint without authentication token - should return 401 Unauthorized"
+          },
+          "response": []
+        },
+        {
+          "name": "Access Protected Endpoint With Invalid Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer invalid.token.here",
+                "description": "Invalid JWT token"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Attempt to access protected endpoint with invalid token - should return 401 Unauthorized"
+          },
+          "response": []
+        },
+        {
+          "name": "Access with User Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "User JWT token"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Access protected endpoint with regular user token"
+          },
+          "response": []
+        },
+        {
+          "name": "Access with Admin Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "description": "Admin JWT token"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/products",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Access protected endpoint with admin token"
+          },
+          "response": []
+        },
+        {
+          "name": "Token Refresh Test",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "    if (!pm.response) {",
+                  "        console.log(\"Error: pm.response is undefined\");",
+                  "        return;",
+                  "    }",
+                  "    if (pm.response.code === 200) {",
+                  "        try {",
+                  "            var jsonData = pm.response.json();",
+                  "            if (jsonData && jsonData.token) {",
+                  "                pm.environment.set(\"refreshed_token\", jsonData.token);",
+                  "                console.log(\"Token refreshed and saved\");",
+                  "            } else if (jsonData && jsonData.accessToken) {",
+                  "                pm.environment.set(\"refreshed_token\", jsonData.accessToken);",
+                  "                console.log(\"Token refreshed and saved from accessToken\");",
+                  "            } else {",
+                  "                console.log(\"Token not found in response. Response body: \" + JSON.stringify(jsonData));",
+                  "            }",
+                  "        } catch (jsonError) {",
+                  "            console.log(\"Error parsing JSON: \" + jsonError.message);",
+                  "            console.log(\"Response text: \" + (pm.response.text() || 'No response text'));",
+                  "        }",
+                  "    } else {",
+                  "        console.log(\"Non-200 response received: \" + pm.response.code);",
+                  "        console.log(\"Response body: \" + (pm.response.text() || 'No response text'));",
+                  "    }",
+                  "} catch (error) {",
+                  "    console.log(\"Error in test script: \" + error.message);",
+                  "    if (pm.response) {",
+                  "        console.log(\"Response body: \" + (pm.response.text() || 'No response text'));",
+                  "    } else {",
+                  "        console.log(\"pm.response is undefined\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "Current JWT token"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/auth/refresh-token",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["auth", "refresh-token"]
+            },
+            "description": "Test token refresh functionality (if implemented)"
           },
           "response": []
         }
@@ -592,7 +1061,13 @@
           "name": "Get All Products",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "JWT authentication token"
+              }
+            ],
             "url": {
               "raw": "{{gatewayUrl}}/products",
               "host": ["{{gatewayUrl}}"],
@@ -606,7 +1081,13 @@
           "name": "Get Product by ID",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "JWT authentication token"
+              }
+            ],
             "url": {
               "raw": "{{gatewayUrl}}/products/{{productId}}",
               "host": ["{{gatewayUrl}}"],
@@ -624,6 +1105,11 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "JWT authentication token"
               }
             ],
             "body": {
@@ -741,7 +1227,13 @@
           "name": "Get Orders by Customer",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "JWT authentication token"
+              }
+            ],
             "url": {
               "raw": "{{gatewayUrl}}/orders/customer/{{customerName}}",
               "host": ["{{gatewayUrl}}"],
@@ -755,7 +1247,13 @@
           "name": "Get Order by ID",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "JWT authentication token"
+              }
+            ],
             "url": {
               "raw": "{{gatewayUrl}}/orders/{{orderNumber}}",
               "host": ["{{gatewayUrl}}"],
@@ -839,7 +1337,13 @@
           "name": "Check Stock - Single SKU",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "description": "JWT authentication token"
+              }
+            ],
             "url": {
               "raw": "{{gatewayUrl}}/inventory?skuCodes=IPHONE14PRO-256-BLACK",
               "host": ["{{gatewayUrl}}"],

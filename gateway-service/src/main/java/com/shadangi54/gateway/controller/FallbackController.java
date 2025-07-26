@@ -33,6 +33,11 @@ public class FallbackController {
         return createFallbackResponse("Inventory Service is currently unavailable", "inventory-service");
     }
     
+    @GetMapping("/auth")
+    public ResponseEntity<Map<String, Object>> authServiceFallback() {
+        return createFallbackResponse("Authentication Service is currently unavailable", "auth-service");
+    }
+    
     private ResponseEntity<Map<String, Object>> createFallbackResponse(String message, String serviceName) {
         Map<String, Object> response = new HashMap<>();
         response.put("message", message);
